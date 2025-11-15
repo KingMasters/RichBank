@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package com.hexagonal.framework.adapter.input.grpc.admin;
+
+option java_multiple_files = true;
+option java_package = "com.hexagonal.framework.adapter.input.grpc.admin";
+option java_outer_classname = "AdminProto";
+
+// Admin Service
+service AdminService {
+  rpc CreateProduct(CreateProductRequest) returns (ProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (ProductResponse);
+  rpc ViewAllOrders(ViewAllOrdersRequest) returns (ListOrdersResponse);
+  rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (OrderResponse);
+  rpc ViewCustomers(ViewCustomersRequest) returns (ListCustomersResponse);
+  rpc ToggleCustomerActive(ToggleCustomerActiveRequest) returns (CustomerResponse);
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  string price_amount = 3;
+  string price_currency = 4;
+  string sku = 5;
+}
+
+message UpdateProductRequest {
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  string price_amount = 4;
+  string price_currency = 5;
+}
+
+message ViewAllOrdersRequest {
+  // Empty for now
+}
+
+message UpdateOrderStatusRequest {
+  string order_id = 1;
+  string status = 2;
+}
+
+message ViewCustomersRequest {
+  // Empty for now
+}
+
+message ToggleCustomerActiveRequest {
+  string customer_id = 1;
+  bool enable = 2;
+}
+
+message ProductResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string price_amount = 4;
+  string price_currency = 5;
+  string sku = 6;
+  int32 stock_quantity = 7;
+  string status = 8;
+}
+
+message OrderResponse {
+  string id = 1;
+  string customer_id = 2;
+  string status = 3;
+  string total_amount = 4;
+  string currency = 5;
+}
+
+message ListOrdersResponse {
+  repeated OrderResponse orders = 1;
+}
+
+message CustomerResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  bool active = 5;
+}
+
+message ListCustomersResponse {
+  repeated CustomerResponse customers = 1;
+}
+

@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: richbank
+  
+  # H2 Database Configuration (In-Memory)
+  datasource:
+    url: jdbc:h2:mem:richbankdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/richbank
+      database: richbank
+    redis:
+      # Redis configuration (for future use)
+      # Uncomment and configure when Redis is available
+      # host: localhost
+      # port: 6379
+      # password: 
+      # timeout: 2000ms
+  
+  # Cache Configuration
+  cache:
+    type: simple  # Use 'redis' when Redis is available
+    cache-names:
+      - products
+      - customers
+      - categories
+      - orders
+      - carts
+  
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: richbank-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# gRPC Configuration
+grpc:
+  server:
+    port: 9090
+
+# Server Configuration
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    com.hexagonal: DEBUG
+    org.springframework.cache: DEBUG
+    org.hibernate: INFO
+

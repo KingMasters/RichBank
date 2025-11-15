@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package com.hexagonal.framework.adapter.input.grpc.customer;
+
+option java_multiple_files = true;
+option java_package = "com.hexagonal.framework.adapter.input.grpc.customer";
+option java_outer_classname = "CustomerProto";
+
+// Customer Service
+service CustomerService {
+  rpc RegisterAccount(RegisterAccountRequest) returns (CustomerResponse);
+  rpc Login(LoginRequest) returns (CustomerResponse);
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+  rpc SearchProducts(SearchProductsRequest) returns (ListProductsResponse);
+  rpc ViewCart(ViewCartRequest) returns (CartResponse);
+  rpc AddProductToCart(AddProductToCartRequest) returns (CartResponse);
+  rpc CompletePurchase(CompletePurchaseRequest) returns (OrderResponse);
+}
+
+message RegisterAccountRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  string phone_number = 4;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message ListProductsRequest {
+  // Empty for now
+}
+
+message SearchProductsRequest {
+  string search_term = 1;
+}
+
+message ViewCartRequest {
+  string customer_id = 1;
+}
+
+message AddProductToCartRequest {
+  string customer_id = 1;
+  string product_id = 2;
+  int32 quantity = 3;
+}
+
+message CompletePurchaseRequest {
+  string customer_id = 1;
+  string cart_id = 2;
+}
+
+message CustomerResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  bool active = 5;
+}
+
+message ProductResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string price_amount = 4;
+  string price_currency = 5;
+  string sku = 6;
+  int32 stock_quantity = 7;
+  string status = 8;
+}
+
+message ListProductsResponse {
+  repeated ProductResponse products = 1;
+}
+
+message CartResponse {
+  string id = 1;
+  string customer_id = 2;
+  repeated CartItemResponse items = 3;
+}
+
+message CartItemResponse {
+  string product_id = 1;
+  int32 quantity = 2;
+}
+
+message OrderResponse {
+  string id = 1;
+  string customer_id = 2;
+  string status = 3;
+  string total_amount = 4;
+  string currency = 5;
+}
+

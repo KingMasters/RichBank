@@ -25,4 +25,20 @@
         </dependency>
     </dependencies>
 
+    <!-- This module is a pure library/domain module. Spring Boot's repackage goal
+         (which looks for a main class) should be skipped here to avoid the
+         "Unable to find main class" error when building the multi-module project. -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- skip repackage for non-executable module -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
