@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: richbank-test
+  
+  # Disable Kafka for tests
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-startup: false
+  
+  # Disable MongoDB for tests
+  data:
+    mongodb:
+      auto-index-creation: false
+  
+  # Use H2 for tests
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+# Disable gRPC for tests
+grpc:
+  server:
+    port: -1
+

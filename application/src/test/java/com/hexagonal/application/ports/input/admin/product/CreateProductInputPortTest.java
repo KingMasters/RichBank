@@ -44,15 +44,14 @@ class CreateProductInputPortTest {
             new BigDecimal("99.99"),
             USD,
             "PROD-001",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            null,  // categoryIds
+            null,  // images
+            null,  // weight
+            null,  // weightUnit
+            null,  // length
+            null,  // width
+            null,  // height
+            null   // dimensionUnit
         );
     }
 
@@ -122,15 +121,23 @@ class CreateProductInputPortTest {
     @DisplayName("Should create product with categories")
     void shouldCreateProductWithCategories() {
         // Given
-        Set<String> categoryIds = Set.of("cat-1", "cat-2");
+        ID categoryId1 = ID.generate();
+        ID categoryId2 = ID.generate();
+        Set<String> categoryIds = Set.of(categoryId1.getValue().toString(), categoryId2.getValue().toString());
         CreateProductCommand commandWithCategories = new CreateProductCommand(
             command.getName(),
             command.getDescription(),
             command.getPrice(),
             command.getCurrency(),
             command.getSku(),
-            categoryIds,
-            null, null, null, null, null, null, null, null
+            categoryIds,  // categoryIds
+            null,  // images
+            null,  // weight
+            null,  // weightUnit
+            null,  // length
+            null,  // width
+            null,  // height
+            null   // dimensionUnit
         );
         
         Product savedProduct = Product.create(
