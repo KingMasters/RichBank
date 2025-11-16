@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,4 +43,14 @@ public class CustomerEntity {
     
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    // Stores the current password hash
+    @Column(name = "current_password")
+    private String currentPassword;
+
+    // Stores password history (most recent first). Uses a separate collection table.
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "customer_password_history", joinColumns = @JoinColumn(name = "customer_id"))
+    @Column(name = "password_hash")
+    private List<String> passwordHistory;
 }

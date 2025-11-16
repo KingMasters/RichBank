@@ -4,12 +4,15 @@ import com.hexagonal.application.ports.output.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.CustomerJpaRepository;
+import com.hexagonal.framework.adapter.output.persistence.h2.entity.CustomerEntity;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,5 +66,32 @@ public class CustomerH2Adapter implements CustomerRepositoryOutputPort {
     public boolean existsById(ID id) {
         return jpaRepository.existsById(id.getValue());
     }
-}
 
+    @Override
+    public List<String> getPasswordHistory(ID id) {
+        Optional<CustomerEntity> optional = jpaRepository.findById(id.getValue());
+        if (optional.isEmpty()) {
+            return Collections.<String>emptyList();
+        }
+        List<String> history = optional.get().getPasswordHistory();
+        return history == null ? Collections.<String>emptyList() : new ArrayList<>(history);
+    }
+
+    @Override
+    @CacheEvict(value = "customers", allEntries = true)
+    public void updatePassword(ID id, String hashedPassword) {
+        var optional = jpaRepository.findById(id.getValue());
+        if (optional.isPresent()) {
+            CustomerEntity entity = optional.get();
+            // prepend new password to history
+            List<String> history = entity.getPasswordHistory();
+            if (history == null) {
+                history = new ArrayList<>();
+            }
+            history.add(0, hashedPassword);
+            entity.setPasswordHistory(history);
+            entity.setCurrentPassword(hashedPassword);
+            jpaRepository.save(entity);
+        }
+    }
+}

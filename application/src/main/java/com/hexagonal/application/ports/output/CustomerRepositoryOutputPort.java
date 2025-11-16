@@ -14,5 +14,9 @@ public interface CustomerRepositoryOutputPort {
     List<Customer> findAll();
     void deleteById(ID id);
     boolean existsById(ID id);
-}
+    // Retrieves the recent password hashes for a customer (most recent first).
+    List<String> getPasswordHistory(ID id);
 
+    // Updates the customer's current password and append it to history.
+    void updatePassword(ID id, String hashedPassword);
+}

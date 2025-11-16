@@ -4,6 +4,7 @@ import com.hexagonal.application.ports.output.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.CustomerDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.CustomerMongoRepository;
+import com.hexagonal.framework.adapter.output.persistence.mongodb.document.CustomerDocument;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,6 +12,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,5 +68,29 @@ public class CustomerMongoAdapter implements CustomerRepositoryOutputPort {
     public boolean existsById(ID id) {
         return mongoRepository.existsById(id.getValue());
     }
-}
 
+    @Override
+    public List<String> getPasswordHistory(ID id) {
+        return (List<String>) mongoRepository.findById(id.getValue())
+            .map(CustomerDocument::getPasswordHistory)
+            .map(list -> list == null ? Collections.emptyList() : new ArrayList<>(list))
+            .orElse(Collections.emptyList());
+    }
+
+    @Override
+    @CacheEvict(value = "customers", allEntries = true)
+    public void updatePassword(ID id, String hashedPassword) {
+        var optional = mongoRepository.findById(id.getValue());
+        if (optional.isPresent()) {
+            CustomerDocument document = optional.get();
+            List<String> history = document.getPasswordHistory();
+            if (history == null) {
+                history = new ArrayList<>();
+            }
+            history.add(0, hashedPassword);
+            document.setPasswordHistory(history);
+            document.setCurrentPassword(hashedPassword);
+            mongoRepository.save(document);
+        }
+    }
+}

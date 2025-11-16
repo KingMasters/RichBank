@@ -4,11 +4,13 @@ import com.hexagonal.application.dto.LoginCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
 import com.hexagonal.application.dto.UpdatePersonalInformationCommand;
 import com.hexagonal.application.dto.ViewOrderHistoryCommand;
+import com.hexagonal.application.dto.ChangePasswordCommand;
 import com.hexagonal.application.ports.input.customer.account.LoginInputPort;
 import com.hexagonal.application.ports.input.customer.account.LogoutInputPort;
 import com.hexagonal.application.ports.input.customer.account.RegisterAccountInputPort;
 import com.hexagonal.application.ports.input.customer.account.UpdatePersonalInformationInputPort;
 import com.hexagonal.application.ports.input.customer.account.ViewOrderHistoryInputPort;
+import com.hexagonal.application.ports.input.customer.account.PasswordChangeInputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
 import org.springframework.http.HttpStatus;
@@ -26,18 +28,21 @@ public class CustomerAccountRestController {
     private final LogoutInputPort logoutInputPort;
     private final UpdatePersonalInformationInputPort updatePersonalInformationInputPort;
     private final ViewOrderHistoryInputPort viewOrderHistoryInputPort;
+    private final PasswordChangeInputPort passwordChangeInputPort;
     
     public CustomerAccountRestController(
             RegisterAccountInputPort registerAccountInputPort,
             LoginInputPort loginInputPort,
             LogoutInputPort logoutInputPort,
             UpdatePersonalInformationInputPort updatePersonalInformationInputPort,
-            ViewOrderHistoryInputPort viewOrderHistoryInputPort) {
+            ViewOrderHistoryInputPort viewOrderHistoryInputPort,
+            PasswordChangeInputPort passwordChangeInputPort) {
         this.registerAccountInputPort = registerAccountInputPort;
         this.loginInputPort = loginInputPort;
         this.logoutInputPort = logoutInputPort;
         this.updatePersonalInformationInputPort = updatePersonalInformationInputPort;
         this.viewOrderHistoryInputPort = viewOrderHistoryInputPort;
+        this.passwordChangeInputPort = passwordChangeInputPort;
     }
     
     @PostMapping("/register")
@@ -63,6 +68,12 @@ public class CustomerAccountRestController {
         Customer customer = updatePersonalInformationInputPort.execute(command);
         return ResponseEntity.ok(customer);
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordCommand command) {
+        passwordChangeInputPort.execute(command);
+        return ResponseEntity.noContent().build();
+    }
     
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> viewOrderHistory(@RequestParam String customerId) {
@@ -71,4 +82,3 @@ public class CustomerAccountRestController {
         return ResponseEntity.ok(orders);
     }
 }
-

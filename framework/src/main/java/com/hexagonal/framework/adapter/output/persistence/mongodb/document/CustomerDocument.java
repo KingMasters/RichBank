@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Document(collection = "customers")
@@ -27,4 +28,10 @@ public class CustomerDocument {
     private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // current password hash
+    private String currentPassword;
+
+    // password history (most recent first)
+    private List<String> passwordHistory;
 }
