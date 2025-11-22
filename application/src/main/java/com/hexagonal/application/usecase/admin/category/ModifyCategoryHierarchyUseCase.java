@@ -1,10 +1,11 @@
 package com.hexagonal.application.usecase.admin.category;
 
+import com.hexagonal.application.port.in.admin.category.ModifyCategoryHierarchyInputPort;
 import com.hexagonal.application.port.out.CategoryRepositoryOutputPort;
 import com.hexagonal.entity.Category;
 import com.hexagonal.vo.ID;
 
-public class ModifyCategoryHierarchyUseCase implements com.hexagonal.application.port.in.admin.category.ModifyCategoryHierarchyInputPort {
+public class ModifyCategoryHierarchyUseCase implements ModifyCategoryHierarchyInputPort {
     private final CategoryRepositoryOutputPort categoryRepository;
 
     public ModifyCategoryHierarchyUseCase(CategoryRepositoryOutputPort categoryRepository) {

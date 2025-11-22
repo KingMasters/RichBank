@@ -1,13 +1,14 @@
 package com.hexagonal.application.usecase.customer.catalog;
 
 import com.hexagonal.application.dto.SearchProductsCommand;
+import com.hexagonal.application.port.in.customer.catalog.SearchProductsInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchProductsUseCase implements com.hexagonal.application.port.in.customer.catalog.SearchProductsInputPort {
+public class SearchProductsUseCase implements SearchProductsInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public SearchProductsUseCase(ProductRepositoryOutputPort productRepository) {

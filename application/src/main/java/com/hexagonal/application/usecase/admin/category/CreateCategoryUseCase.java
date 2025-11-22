@@ -1,11 +1,12 @@
 package com.hexagonal.application.usecase.admin.category;
 
 import com.hexagonal.application.dto.CreateCategoryCommand;
+import com.hexagonal.application.port.in.admin.category.CreateCategoryInputPort;
 import com.hexagonal.application.port.out.CategoryRepositoryOutputPort;
 import com.hexagonal.entity.Category;
 import com.hexagonal.vo.ID;
 
-public class CreateCategoryUseCase implements com.hexagonal.application.port.in.admin.category.CreateCategoryInputPort {
+public class CreateCategoryUseCase implements CreateCategoryInputPort {
     private final CategoryRepositoryOutputPort categoryRepository;
 
     public CreateCategoryUseCase(CategoryRepositoryOutputPort categoryRepository) {

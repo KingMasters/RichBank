@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.cart;
 
 import com.hexagonal.application.dto.ViewCartCommand;
+import com.hexagonal.application.port.in.customer.cart.ViewCartInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.ID;
 
-public class ViewCartUseCase implements com.hexagonal.application.port.in.customer.cart.ViewCartInputPort {
+public class ViewCartUseCase implements ViewCartInputPort {
     private final CartRepositoryOutputPort cartRepository;
 
     public ViewCartUseCase(CartRepositoryOutputPort cartRepository) {

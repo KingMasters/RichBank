@@ -1,11 +1,12 @@
 package com.hexagonal.application.usecase.customer.checkout;
 
+import com.hexagonal.application.port.in.customer.checkout.ReceiveOrderConfirmationInputPort;
 import com.hexagonal.application.port.out.OrderRepositoryOutputPort;
 import com.hexagonal.entity.Order;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.ID;
 
-public class ReceiveOrderConfirmationUseCase implements com.hexagonal.application.port.in.customer.checkout.ReceiveOrderConfirmationInputPort {
+public class ReceiveOrderConfirmationUseCase implements ReceiveOrderConfirmationInputPort {
     private final OrderRepositoryOutputPort orderRepository;
 
     public ReceiveOrderConfirmationUseCase(OrderRepositoryOutputPort orderRepository) {

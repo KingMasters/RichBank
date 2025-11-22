@@ -1,5 +1,6 @@
 package com.hexagonal.application.usecase.admin.product;
 
+import com.hexagonal.application.port.in.admin.product.RemoveProductInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.exception.EntityNotFoundException;
@@ -9,7 +10,7 @@ import com.hexagonal.vo.ID;
  * Input Port - Remove Product Use Case Implementation
  * Framework katmanından (Controller) application katmanına giriş noktası
  */
-public class RemoveProductUseCase implements com.hexagonal.application.port.in.admin.product.RemoveProductInputPort {
+public class RemoveProductUseCase implements RemoveProductInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public RemoveProductUseCase(ProductRepositoryOutputPort productRepository) {

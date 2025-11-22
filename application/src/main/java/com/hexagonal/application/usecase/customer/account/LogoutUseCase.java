@@ -1,8 +1,9 @@
 package com.hexagonal.application.usecase.customer.account;
 
 import com.hexagonal.application.dto.LoginCommand;
+import com.hexagonal.application.port.in.customer.account.LogoutInputPort;
 
-public class LogoutUseCase implements com.hexagonal.application.port.in.customer.account.LogoutInputPort {
+public class LogoutUseCase implements LogoutInputPort {
     public LogoutUseCase() {
     }
 

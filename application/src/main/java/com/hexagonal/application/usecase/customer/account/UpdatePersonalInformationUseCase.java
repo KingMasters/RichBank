@@ -1,13 +1,14 @@
 package com.hexagonal.application.usecase.customer.account;
 
 import com.hexagonal.application.dto.UpdatePersonalInformationCommand;
+import com.hexagonal.application.port.in.customer.account.UpdatePersonalInformationInputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 
-public class UpdatePersonalInformationUseCase implements com.hexagonal.application.port.in.customer.account.UpdatePersonalInformationInputPort {
+public class UpdatePersonalInformationUseCase implements UpdatePersonalInformationInputPort {
     private final CustomerRepositoryOutputPort customerRepository;
 
     public UpdatePersonalInformationUseCase(CustomerRepositoryOutputPort customerRepository) {

@@ -1,11 +1,12 @@
 package com.hexagonal.application.usecase.admin.order;
 
+import com.hexagonal.application.port.in.admin.order.UpdateOrderStatusInputPort;
 import com.hexagonal.application.port.out.OrderRepositoryOutputPort;
 import com.hexagonal.vo.ID;
 import com.hexagonal.vo.OrderStatus;
 import com.hexagonal.entity.Order;
 
-public class UpdateOrderStatusUseCase implements com.hexagonal.application.port.in.admin.order.UpdateOrderStatusInputPort {
+public class UpdateOrderStatusUseCase implements UpdateOrderStatusInputPort {
     private final OrderRepositoryOutputPort orderRepository;
 
     public UpdateOrderStatusUseCase(OrderRepositoryOutputPort orderRepository) {

@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.admin.product;
 
 import com.hexagonal.application.dto.ManageStockCommand;
+import com.hexagonal.application.port.in.admin.product.ManageProductStockInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.exception.EntityNotFoundException;
@@ -11,7 +12,7 @@ import com.hexagonal.vo.Quantity;
  * Input Port - Manage Product Stock Use Case Implementation
  * Framework katmanından (Controller) application katmanına giriş noktası
  */
-public class ManageProductStockUseCase implements com.hexagonal.application.port.in.admin.product.ManageProductStockInputPort {
+public class ManageProductStockUseCase implements ManageProductStockInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public ManageProductStockUseCase(ProductRepositoryOutputPort productRepository) {

@@ -1,11 +1,12 @@
 package com.hexagonal.application.usecase.admin.user;
 
+import com.hexagonal.application.port.in.admin.user.ToggleCustomerActiveInputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.ID;
 
-public class ToggleCustomerActiveUseCase implements com.hexagonal.application.port.in.admin.user.ToggleCustomerActiveInputPort {
+public class ToggleCustomerActiveUseCase implements ToggleCustomerActiveInputPort {
     private final CustomerRepositoryOutputPort customerRepository;
 
     public ToggleCustomerActiveUseCase(CustomerRepositoryOutputPort customerRepository) {

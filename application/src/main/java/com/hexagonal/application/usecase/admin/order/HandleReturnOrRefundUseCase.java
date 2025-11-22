@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.admin.order;
 
+import com.hexagonal.application.port.in.admin.order.HandleReturnOrRefundInputPort;
 import com.hexagonal.application.port.out.OrderRepositoryOutputPort;
 import com.hexagonal.application.port.out.PaymentRepositoryOutputPort;
 import com.hexagonal.application.dto.RefundCommand;
 import com.hexagonal.entity.Order;
 import com.hexagonal.vo.ID;
 
-public class HandleReturnOrRefundUseCase implements com.hexagonal.application.port.in.admin.order.HandleReturnOrRefundInputPort {
+public class HandleReturnOrRefundUseCase implements HandleReturnOrRefundInputPort {
     private final OrderRepositoryOutputPort orderRepository;
     private final PaymentRepositoryOutputPort paymentRepository;
 

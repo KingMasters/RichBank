@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.checkout;
 
 import com.hexagonal.application.dto.ApplyDiscountCodeCommand;
+import com.hexagonal.application.port.in.customer.checkout.ApplyDiscountCodeInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.ID;
 
-public class ApplyDiscountCodeUseCase implements com.hexagonal.application.port.in.customer.checkout.ApplyDiscountCodeInputPort {
+public class ApplyDiscountCodeUseCase implements ApplyDiscountCodeInputPort {
     private final CartRepositoryOutputPort cartRepository;
 
     public ApplyDiscountCodeUseCase(CartRepositoryOutputPort cartRepository) {

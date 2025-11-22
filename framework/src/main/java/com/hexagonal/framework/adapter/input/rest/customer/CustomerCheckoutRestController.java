@@ -4,10 +4,10 @@ import com.hexagonal.application.dto.ApplyDiscountCodeCommand;
 import com.hexagonal.application.dto.CompletePurchaseCommand;
 import com.hexagonal.application.dto.EnterShippingInformationCommand;
 import com.hexagonal.application.dto.SelectPaymentMethodCommand;
-import com.hexagonal.application.usecase.customer.checkout.ApplyDiscountCodeUseCase;
-import com.hexagonal.application.usecase.customer.checkout.CompletePurchaseUseCase;
-import com.hexagonal.application.usecase.customer.checkout.EnterShippingInformationUseCase;
-import com.hexagonal.application.usecase.customer.checkout.SelectPaymentMethodUseCase;
+import com.hexagonal.application.port.in.customer.checkout.ApplyDiscountCodeInputPort;
+import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseInputPort;
+import com.hexagonal.application.port.in.customer.checkout.EnterShippingInformationInputPort;
+import com.hexagonal.application.port.in.customer.checkout.SelectPaymentMethodInputPort;
 import com.hexagonal.entity.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,43 +16,43 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/customer/checkout")
 public class CustomerCheckoutRestController {
     
-    private final EnterShippingInformationUseCase enterShippingInformationUseCase;
-    private final SelectPaymentMethodUseCase selectPaymentMethodUseCase;
-    private final ApplyDiscountCodeUseCase applyDiscountCodeUseCase;
-    private final CompletePurchaseUseCase completePurchaseUseCase;
+    private final EnterShippingInformationInputPort enterShippingInformationInputPort;
+    private final SelectPaymentMethodInputPort selectPaymentMethodInputPort;
+    private final ApplyDiscountCodeInputPort applyDiscountCodeInputPort;
+    private final CompletePurchaseInputPort completePurchaseInputPort;
     
     public CustomerCheckoutRestController(
-            EnterShippingInformationUseCase enterShippingInformationUseCase,
-            SelectPaymentMethodUseCase selectPaymentMethodUseCase,
-            ApplyDiscountCodeUseCase applyDiscountCodeUseCase,
-            CompletePurchaseUseCase completePurchaseUseCase) {
-        this.enterShippingInformationUseCase = enterShippingInformationUseCase;
-        this.selectPaymentMethodUseCase = selectPaymentMethodUseCase;
-        this.applyDiscountCodeUseCase = applyDiscountCodeUseCase;
-        this.completePurchaseUseCase = completePurchaseUseCase;
+            EnterShippingInformationInputPort enterShippingInformationInputPort,
+            SelectPaymentMethodInputPort selectPaymentMethodInputPort,
+            ApplyDiscountCodeInputPort applyDiscountCodeInputPort,
+            CompletePurchaseInputPort completePurchaseInputPort) {
+        this.enterShippingInformationInputPort = enterShippingInformationInputPort;
+        this.selectPaymentMethodInputPort = selectPaymentMethodInputPort;
+        this.applyDiscountCodeInputPort = applyDiscountCodeInputPort;
+        this.completePurchaseInputPort = completePurchaseInputPort;
     }
     
     @PostMapping("/shipping")
     public ResponseEntity<Void> enterShippingInfo(@RequestBody EnterShippingInformationCommand command) {
-        enterShippingInformationUseCase.execute(command);
+        enterShippingInformationInputPort.execute(command);
         return ResponseEntity.ok().build();
     }
     
     @PostMapping("/payment-method")
     public ResponseEntity<Void> selectPaymentMethod(@RequestBody SelectPaymentMethodCommand command) {
-        selectPaymentMethodUseCase.execute(command);
+        selectPaymentMethodInputPort.execute(command);
         return ResponseEntity.ok().build();
     }
     
     @PostMapping("/discount")
     public ResponseEntity<Void> applyDiscountCode(@RequestBody ApplyDiscountCodeCommand command) {
-        applyDiscountCodeUseCase.execute(command);
+        applyDiscountCodeInputPort.execute(command);
         return ResponseEntity.ok().build();
     }
     
     @PostMapping("/complete")
     public ResponseEntity<Order> completePurchase(@RequestBody CompletePurchaseCommand command) {
-        Order order = completePurchaseUseCase.execute(command);
+        Order order = completePurchaseInputPort.execute(command);
         return ResponseEntity.ok(order);
     }
 }

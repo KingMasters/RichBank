@@ -1,13 +1,14 @@
 package com.hexagonal.application.usecase.customer.catalog;
 
 import com.hexagonal.application.dto.SortProductsCommand;
+import com.hexagonal.application.port.in.customer.catalog.SortProductsInputPort;
 import com.hexagonal.entity.Product;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SortProductsUseCase implements com.hexagonal.application.port.in.customer.catalog.SortProductsInputPort {
+public class SortProductsUseCase implements SortProductsInputPort {
     public SortProductsUseCase() {
     }
 

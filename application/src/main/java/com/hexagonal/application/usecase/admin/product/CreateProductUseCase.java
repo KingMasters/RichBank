@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.admin.product;
 
 import com.hexagonal.application.dto.CreateProductCommand;
+import com.hexagonal.application.port.in.admin.product.CreateProductInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.exception.DuplicateEntityException;
@@ -15,7 +16,7 @@ import java.util.Set;
  * Input Port - Create Product Use Case Implementation
  * Framework katmanından (Controller) application katmanına giriş noktası
  */
-public class CreateProductUseCase implements com.hexagonal.application.port.in.admin.product.CreateProductInputPort {
+public class CreateProductUseCase implements CreateProductInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public CreateProductUseCase(ProductRepositoryOutputPort productRepository) {

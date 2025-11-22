@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.catalog;
 
+import com.hexagonal.application.port.in.customer.catalog.ListAllProductsInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListAllProductsUseCase implements com.hexagonal.application.port.in.customer.catalog.ListAllProductsInputPort {
+public class ListAllProductsUseCase implements ListAllProductsInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public ListAllProductsUseCase(ProductRepositoryOutputPort productRepository) {

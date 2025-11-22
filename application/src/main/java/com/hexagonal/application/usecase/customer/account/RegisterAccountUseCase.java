@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.account;
 
 import com.hexagonal.application.dto.RegisterAccountCommand;
+import com.hexagonal.application.port.in.customer.account.RegisterAccountInputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.exception.DuplicateEntityException;
 import com.hexagonal.vo.Email;
 
-public class RegisterAccountUseCase implements com.hexagonal.application.port.in.customer.account.RegisterAccountInputPort {
+public class RegisterAccountUseCase implements RegisterAccountInputPort {
     private final CustomerRepositoryOutputPort customerRepository;
 
     public RegisterAccountUseCase(CustomerRepositoryOutputPort customerRepository) {

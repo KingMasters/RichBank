@@ -1,11 +1,12 @@
 package com.hexagonal.application.usecase.admin.user;
 
+import com.hexagonal.application.port.in.admin.user.ViewCustomersInputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 
 import java.util.List;
 
-public class ViewCustomersUseCase implements com.hexagonal.application.port.in.admin.user.ViewCustomersInputPort {
+public class ViewCustomersUseCase implements ViewCustomersInputPort {
     private final CustomerRepositoryOutputPort customerRepository;
 
     public ViewCustomersUseCase(CustomerRepositoryOutputPort customerRepository) {

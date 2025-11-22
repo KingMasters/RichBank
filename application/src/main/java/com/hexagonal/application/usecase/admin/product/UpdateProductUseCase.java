@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.admin.product;
 
 import com.hexagonal.application.dto.UpdateProductCommand;
+import com.hexagonal.application.port.in.admin.product.UpdateProductInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.exception.EntityNotFoundException;
@@ -15,7 +16,7 @@ import java.util.Set;
  * Input Port - Update Product Use Case Implementation
  * Framework katmanından (Controller) application katmanına giriş noktası
  */
-public class UpdateProductUseCase implements com.hexagonal.application.port.in.admin.product.UpdateProductInputPort {
+public class UpdateProductUseCase implements UpdateProductInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public UpdateProductUseCase(ProductRepositoryOutputPort productRepository) {

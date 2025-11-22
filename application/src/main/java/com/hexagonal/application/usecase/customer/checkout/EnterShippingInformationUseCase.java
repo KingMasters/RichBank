@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.customer.checkout;
 
 import com.hexagonal.application.dto.EnterShippingInformationCommand;
+import com.hexagonal.application.port.in.customer.checkout.EnterShippingInformationInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
@@ -9,7 +10,7 @@ import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.Address;
 import com.hexagonal.vo.ID;
 
-public class EnterShippingInformationUseCase implements com.hexagonal.application.port.in.customer.checkout.EnterShippingInformationInputPort {
+public class EnterShippingInformationUseCase implements EnterShippingInformationInputPort {
     private final CartRepositoryOutputPort cartRepository;
     private final CustomerRepositoryOutputPort customerRepository;
 

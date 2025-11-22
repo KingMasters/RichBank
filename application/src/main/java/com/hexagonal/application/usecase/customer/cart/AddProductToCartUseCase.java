@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.customer.cart;
 
 import com.hexagonal.application.dto.AddProductToCartCommand;
+import com.hexagonal.application.port.in.customer.cart.AddProductToCartInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
@@ -11,7 +12,7 @@ import com.hexagonal.vo.ID;
 import com.hexagonal.vo.Money;
 import com.hexagonal.vo.Quantity;
 
-public class AddProductToCartUseCase implements com.hexagonal.application.port.in.customer.cart.AddProductToCartInputPort {
+public class AddProductToCartUseCase implements AddProductToCartInputPort {
     private final CartRepositoryOutputPort cartRepository;
     private final ProductRepositoryOutputPort productRepository;
 

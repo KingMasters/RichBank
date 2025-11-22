@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.account;
 
 import com.hexagonal.application.dto.LoginCommand;
+import com.hexagonal.application.port.in.customer.account.LoginInputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.Email;
 
-public class LoginUseCase implements com.hexagonal.application.port.in.customer.account.LoginInputPort {
+public class LoginUseCase implements LoginInputPort {
     private final CustomerRepositoryOutputPort customerRepository;
 
     public LoginUseCase(CustomerRepositoryOutputPort customerRepository) {

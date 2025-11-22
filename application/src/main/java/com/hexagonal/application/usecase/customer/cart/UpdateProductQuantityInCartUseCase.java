@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.customer.cart;
 
 import com.hexagonal.application.dto.UpdateProductQuantityInCartCommand;
+import com.hexagonal.application.port.in.customer.cart.UpdateProductQuantityInCartInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
@@ -10,7 +11,7 @@ import com.hexagonal.exception.InsufficientStockException;
 import com.hexagonal.vo.ID;
 import com.hexagonal.vo.Quantity;
 
-public class UpdateProductQuantityInCartUseCase implements com.hexagonal.application.port.in.customer.cart.UpdateProductQuantityInCartInputPort {
+public class UpdateProductQuantityInCartUseCase implements UpdateProductQuantityInCartInputPort {
     private final CartRepositoryOutputPort cartRepository;
     private final ProductRepositoryOutputPort productRepository;
 

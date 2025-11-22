@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.customer.checkout;
 
 import com.hexagonal.application.dto.CompletePurchaseCommand;
+import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.application.port.out.OrderRepositoryOutputPort;
@@ -18,7 +19,7 @@ import com.hexagonal.vo.ID;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompletePurchaseUseCase implements com.hexagonal.application.port.in.customer.checkout.CompletePurchaseInputPort {
+public class CompletePurchaseUseCase implements CompletePurchaseInputPort {
     private final CartRepositoryOutputPort cartRepository;
     private final CustomerRepositoryOutputPort customerRepository;
     private final OrderRepositoryOutputPort orderRepository;

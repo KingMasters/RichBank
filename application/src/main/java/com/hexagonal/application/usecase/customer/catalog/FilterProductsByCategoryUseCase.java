@@ -1,6 +1,7 @@
 package com.hexagonal.application.usecase.customer.catalog;
 
 import com.hexagonal.application.dto.FilterProductsByCategoryCommand;
+import com.hexagonal.application.port.in.customer.catalog.FilterProductsByCategoryInputPort;
 import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.vo.ID;
@@ -8,7 +9,7 @@ import com.hexagonal.vo.ID;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterProductsByCategoryUseCase implements com.hexagonal.application.port.in.customer.catalog.FilterProductsByCategoryInputPort {
+public class FilterProductsByCategoryUseCase implements FilterProductsByCategoryInputPort {
     private final ProductRepositoryOutputPort productRepository;
 
     public FilterProductsByCategoryUseCase(ProductRepositoryOutputPort productRepository) {

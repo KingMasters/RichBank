@@ -1,12 +1,13 @@
 package com.hexagonal.application.usecase.customer.cart;
 
 import com.hexagonal.application.dto.RemoveProductFromCartCommand;
+import com.hexagonal.application.port.in.customer.cart.RemoveProductFromCartInputPort;
 import com.hexagonal.application.port.out.CartRepositoryOutputPort;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.exception.EntityNotFoundException;
 import com.hexagonal.vo.ID;
 
-public class RemoveProductFromCartUseCase implements com.hexagonal.application.port.in.customer.cart.RemoveProductFromCartInputPort {
+public class RemoveProductFromCartUseCase implements RemoveProductFromCartInputPort {
     private final CartRepositoryOutputPort cartRepository;
 
     public RemoveProductFromCartUseCase(CartRepositoryOutputPort cartRepository) {
