@@ -29,9 +29,9 @@ public class CustomerDocument {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // current password hash
-    private String currentPassword;
+    // Current hashed password
+    private String password;
 
-    // password history (most recent first)
+    // Password history (most recent first)
     private List<String> passwordHistory;
 }

@@ -4,7 +4,6 @@ import com.hexagonal.application.ports.output.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.CustomerJpaRepository;
-import com.hexagonal.framework.adapter.output.persistence.h2.entity.CustomerEntity;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
@@ -69,29 +68,27 @@ public class CustomerH2Adapter implements CustomerRepositoryOutputPort {
 
     @Override
     public List<String> getPasswordHistory(ID id) {
-        Optional<CustomerEntity> optional = jpaRepository.findById(id.getValue());
-        if (optional.isEmpty()) {
-            return Collections.<String>emptyList();
-        }
-        List<String> history = optional.get().getPasswordHistory();
-        return history == null ? Collections.<String>emptyList() : new ArrayList<>(history);
+        return jpaRepository.findById(id.getValue())
+            .map(entity -> entity.getPasswordHistory() == null ? Collections.<String>emptyList() : entity.getPasswordHistory())
+            .orElse(Collections.emptyList());
     }
 
     @Override
-    @CacheEvict(value = "customers", allEntries = true)
     public void updatePassword(ID id, String hashedPassword) {
-        var optional = jpaRepository.findById(id.getValue());
-        if (optional.isPresent()) {
-            CustomerEntity entity = optional.get();
-            // prepend new password to history
+        jpaRepository.findById(id.getValue()).ifPresent(entity -> {
             List<String> history = entity.getPasswordHistory();
             if (history == null) {
                 history = new ArrayList<>();
+            } else {
+                history = new ArrayList<>(history);
             }
+
+            // Prepend the new hash as most recent
             history.add(0, hashedPassword);
+            entity.setPassword(hashedPassword);
             entity.setPasswordHistory(history);
-            entity.setCurrentPassword(hashedPassword);
+
             jpaRepository.save(entity);
-        }
+        });
     }
 }

@@ -44,11 +44,10 @@ public class CustomerEntity {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // Stores the current password hash
-    @Column(name = "current_password")
-    private String currentPassword;
+    // Current hashed password
+    private String password;
 
-    // Stores password history (most recent first). Uses a separate collection table.
+    // Password history stored in a separate collection table
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "customer_password_history", joinColumns = @JoinColumn(name = "customer_id"))
     @Column(name = "password_hash")

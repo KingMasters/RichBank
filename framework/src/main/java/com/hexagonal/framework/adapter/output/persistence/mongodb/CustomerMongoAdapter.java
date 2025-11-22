@@ -2,9 +2,9 @@ package com.hexagonal.framework.adapter.output.persistence.mongodb;
 
 import com.hexagonal.application.ports.output.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
+import com.hexagonal.framework.adapter.output.persistence.mongodb.document.CustomerDocument;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.CustomerDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.CustomerMongoRepository;
-import com.hexagonal.framework.adapter.output.persistence.mongodb.document.CustomerDocument;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -71,26 +71,30 @@ public class CustomerMongoAdapter implements CustomerRepositoryOutputPort {
 
     @Override
     public List<String> getPasswordHistory(ID id) {
-        return (List<String>) mongoRepository.findById(id.getValue())
-            .map(CustomerDocument::getPasswordHistory)
-            .map(list -> list == null ? Collections.emptyList() : new ArrayList<>(list))
+        return mongoRepository.findById(id.getValue())
+            .map(doc -> doc.getPasswordHistory() == null ? Collections.<String>emptyList() : doc.getPasswordHistory())
             .orElse(Collections.emptyList());
     }
 
     @Override
-    @CacheEvict(value = "customers", allEntries = true)
     public void updatePassword(ID id, String hashedPassword) {
-        var optional = mongoRepository.findById(id.getValue());
-        if (optional.isPresent()) {
-            CustomerDocument document = optional.get();
-            List<String> history = document.getPasswordHistory();
+        // Load document, prepend new password to history (most recent first), set current password, save
+        mongoRepository.findById(id.getValue()).ifPresent(doc -> {
+            List<String> history = doc.getPasswordHistory();
             if (history == null) {
                 history = new ArrayList<>();
+            } else {
+                // make a mutable copy
+                history = new ArrayList<>(history);
             }
+
+            // Prepend new hashed password
             history.add(0, hashedPassword);
-            document.setPasswordHistory(history);
-            document.setCurrentPassword(hashedPassword);
-            mongoRepository.save(document);
-        }
+
+            doc.setPassword(hashedPassword);
+            doc.setPasswordHistory(history);
+
+            mongoRepository.save(doc);
+        });
     }
 }
