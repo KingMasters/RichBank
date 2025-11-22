@@ -1,9 +1,9 @@
 package com.hexagonal.framework.adapter.input.rest.admin;
 
 import com.hexagonal.application.dto.RefundCommand;
-import com.hexagonal.application.ports.input.admin.order.HandleReturnOrRefundInputPort;
-import com.hexagonal.application.ports.input.admin.order.UpdateOrderStatusInputPort;
-import com.hexagonal.application.ports.input.admin.order.ViewAllOrdersInputPort;
+import com.hexagonal.application.usecase.admin.order.HandleReturnOrRefundUseCase;
+import com.hexagonal.application.usecase.admin.order.UpdateOrderStatusUseCase;
+import com.hexagonal.application.usecase.admin.order.ViewAllOrdersUseCase;
 import com.hexagonal.entity.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +14,22 @@ import java.util.List;
 @RequestMapping("/api/admin/orders")
 public class AdminOrderRestController {
     
-    private final ViewAllOrdersInputPort viewAllOrdersInputPort;
-    private final UpdateOrderStatusInputPort updateOrderStatusInputPort;
-    private final HandleReturnOrRefundInputPort handleReturnOrRefundInputPort;
+    private final ViewAllOrdersUseCase viewAllOrdersUseCase;
+    private final UpdateOrderStatusUseCase updateOrderStatusUseCase;
+    private final HandleReturnOrRefundUseCase handleReturnOrRefundUseCase;
     
     public AdminOrderRestController(
-            ViewAllOrdersInputPort viewAllOrdersInputPort,
-            UpdateOrderStatusInputPort updateOrderStatusInputPort,
-            HandleReturnOrRefundInputPort handleReturnOrRefundInputPort) {
-        this.viewAllOrdersInputPort = viewAllOrdersInputPort;
-        this.updateOrderStatusInputPort = updateOrderStatusInputPort;
-        this.handleReturnOrRefundInputPort = handleReturnOrRefundInputPort;
+            ViewAllOrdersUseCase viewAllOrdersUseCase,
+            UpdateOrderStatusUseCase updateOrderStatusUseCase,
+            HandleReturnOrRefundUseCase handleReturnOrRefundUseCase) {
+        this.viewAllOrdersUseCase = viewAllOrdersUseCase;
+        this.updateOrderStatusUseCase = updateOrderStatusUseCase;
+        this.handleReturnOrRefundUseCase = handleReturnOrRefundUseCase;
     }
     
     @GetMapping
     public ResponseEntity<List<Order>> viewAllOrders() {
-        List<Order> orders = viewAllOrdersInputPort.execute();
+        List<Order> orders = viewAllOrdersUseCase.execute();
         return ResponseEntity.ok(orders);
     }
     
@@ -37,7 +37,7 @@ public class AdminOrderRestController {
     public ResponseEntity<Order> updateOrderStatus(
             @PathVariable String orderId,
             @RequestParam String status) {
-        Order order = updateOrderStatusInputPort.execute(
+        Order order = updateOrderStatusUseCase.execute(
             com.hexagonal.vo.ID.of(orderId),
             com.hexagonal.vo.OrderStatus.valueOf(status)
         );
@@ -48,7 +48,7 @@ public class AdminOrderRestController {
     public ResponseEntity<Order> handleRefund(
             @RequestParam String orderId,
             @RequestBody RefundCommand command) {
-        Order order = handleReturnOrRefundInputPort.execute(
+        Order order = handleReturnOrRefundUseCase.execute(
             com.hexagonal.vo.ID.of(orderId),
             command
         );

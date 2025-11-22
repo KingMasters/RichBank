@@ -1,6 +1,6 @@
 package com.hexagonal.framework.adapter.output.persistence.h2;
 
-import com.hexagonal.application.ports.output.ProductRepositoryOutputPort;
+import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;

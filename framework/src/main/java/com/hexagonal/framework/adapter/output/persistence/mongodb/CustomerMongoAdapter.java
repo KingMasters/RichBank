@@ -1,8 +1,7 @@
 package com.hexagonal.framework.adapter.output.persistence.mongodb;
 
-import com.hexagonal.application.ports.output.CustomerRepositoryOutputPort;
+import com.hexagonal.application.port.out.CustomerRepositoryOutputPort;
 import com.hexagonal.entity.Customer;
-import com.hexagonal.framework.adapter.output.persistence.mongodb.document.CustomerDocument;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.CustomerDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.CustomerMongoRepository;
 import com.hexagonal.vo.Email;

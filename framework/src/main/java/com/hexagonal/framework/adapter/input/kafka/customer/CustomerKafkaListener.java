@@ -1,9 +1,9 @@
 package com.hexagonal.framework.adapter.input.kafka.customer;
 
 import com.hexagonal.application.dto.*;
-import com.hexagonal.application.ports.input.customer.account.RegisterAccountInputPort;
-import com.hexagonal.application.ports.input.customer.cart.AddProductToCartInputPort;
-import com.hexagonal.application.ports.input.customer.checkout.CompletePurchaseInputPort;
+import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCase;
+import com.hexagonal.application.usecase.customer.cart.AddProductToCartUseCase;
+import com.hexagonal.application.usecase.customer.checkout.CompletePurchaseUseCase;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
@@ -31,19 +31,19 @@ public class CustomerKafkaListener {
     private static final Logger logger = LoggerFactory.getLogger(CustomerKafkaListener.class);
     
     private final ObjectMapper objectMapper;
-    private final RegisterAccountInputPort registerAccountInputPort;
-    private final AddProductToCartInputPort addProductToCartInputPort;
-    private final CompletePurchaseInputPort completePurchaseInputPort;
+    private final RegisterAccountUseCase registerAccountUseCase;
+    private final AddProductToCartUseCase addProductToCartUseCase;
+    private final CompletePurchaseUseCase completePurchaseUseCase;
     
     public CustomerKafkaListener(
             ObjectMapper objectMapper,
-            RegisterAccountInputPort registerAccountInputPort,
-            AddProductToCartInputPort addProductToCartInputPort,
-            CompletePurchaseInputPort completePurchaseInputPort) {
+            RegisterAccountUseCase registerAccountUseCase,
+            AddProductToCartUseCase addProductToCartUseCase,
+            CompletePurchaseUseCase completePurchaseUseCase) {
         this.objectMapper = objectMapper;
-        this.registerAccountInputPort = registerAccountInputPort;
-        this.addProductToCartInputPort = addProductToCartInputPort;
-        this.completePurchaseInputPort = completePurchaseInputPort;
+        this.registerAccountUseCase = registerAccountUseCase;
+        this.addProductToCartUseCase = addProductToCartUseCase;
+        this.completePurchaseUseCase = completePurchaseUseCase;
     }
     
     @KafkaListener(topics = "customer.register", groupId = "richbank-customer-group")
@@ -55,7 +55,7 @@ public class CustomerKafkaListener {
             logger.info("Received customer registration event from topic: {}", topic);
             
             RegisterAccountCommand command = objectMapper.readValue(message, RegisterAccountCommand.class);
-            Customer customer = registerAccountInputPort.execute(command);
+            Customer customer = registerAccountUseCase.execute(command);
             
             logger.info("Customer registered successfully: {}", customer.getId().getValue());
             
@@ -75,7 +75,7 @@ public class CustomerKafkaListener {
             logger.info("Received add to cart event from topic: {}", topic);
             
             AddProductToCartCommand command = objectMapper.readValue(message, AddProductToCartCommand.class);
-            Cart cart = addProductToCartInputPort.execute(command);
+            Cart cart = addProductToCartUseCase.execute(command);
             
             logger.info("Product added to cart successfully: cartId={}", cart.getId().getValue());
             
@@ -94,7 +94,7 @@ public class CustomerKafkaListener {
             logger.info("Received complete purchase event from topic: {}", topic);
             
             CompletePurchaseCommand command = objectMapper.readValue(message, CompletePurchaseCommand.class);
-            Order order = completePurchaseInputPort.execute(command);
+            Order order = completePurchaseUseCase.execute(command);
             
             logger.info("Purchase completed successfully: orderId={}", order.getId().getValue());
             

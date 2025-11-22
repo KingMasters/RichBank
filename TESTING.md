@@ -111,7 +111,7 @@ class CustomerAccountRestControllerTest {
 @Test
 void shouldHandleCustomerRegisterEvent() throws Exception {
     listener.handleCustomerRegister(message, "customer.register", acknowledgment);
-    verify(registerAccountInputPort).execute(any());
+    verify(registerAccountUseCase).execute(any());
     verify(acknowledgment).acknowledge();
 }
 ```

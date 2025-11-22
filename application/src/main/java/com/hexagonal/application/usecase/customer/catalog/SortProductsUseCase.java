@@ -1,0 +1,51 @@
+package com.hexagonal.application.usecase.customer.catalog;
+
+import com.hexagonal.application.dto.SortProductsCommand;
+import com.hexagonal.entity.Product;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SortProductsUseCase implements com.hexagonal.application.port.in.customer.catalog.SortProductsInputPort {
+    public SortProductsUseCase() {
+    }
+
+    @Override
+    public List<Product> execute(List<Product> products, SortProductsCommand command) {
+        if (products == null) {
+            throw new IllegalArgumentException("Products list cannot be null");
+        }
+        if (command == null) {
+            throw new IllegalArgumentException("SortProductsCommand cannot be null");
+        }
+
+        Comparator<Product> comparator = getComparator(command);
+        
+        if ("desc".equalsIgnoreCase(command.getSortOrder())) {
+            comparator = comparator.reversed();
+        }
+
+        return products.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
+    private Comparator<Product> getComparator(SortProductsCommand command) {
+        String sortBy = command.getSortBy().toLowerCase();
+        
+        switch (sortBy) {
+            case "price":
+                return Comparator.comparing(product -> product.getPrice().getAmount());
+            case "name":
+                return Comparator.comparing(Product::getName);
+            case "popularity":
+                // Note: Popularity would typically be based on order count or views
+                // For now, we'll use a default sort by name
+                return Comparator.comparing(Product::getName);
+            default:
+                throw new IllegalArgumentException("Invalid sort by field: " + command.getSortBy());
+        }
+    }
+}
+

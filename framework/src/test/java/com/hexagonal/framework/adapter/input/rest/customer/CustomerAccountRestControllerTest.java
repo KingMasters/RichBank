@@ -3,11 +3,11 @@ package com.hexagonal.framework.adapter.input.rest.customer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.LoginCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
-import com.hexagonal.application.ports.input.customer.account.LoginInputPort;
-import com.hexagonal.application.ports.input.customer.account.LogoutInputPort;
-import com.hexagonal.application.ports.input.customer.account.RegisterAccountInputPort;
-import com.hexagonal.application.ports.input.customer.account.UpdatePersonalInformationInputPort;
-import com.hexagonal.application.ports.input.customer.account.ViewOrderHistoryInputPort;
+import com.hexagonal.application.usecase.customer.account.LoginUseCase;
+import com.hexagonal.application.usecase.customer.account.LogoutUseCase;
+import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCase;
+import com.hexagonal.application.usecase.customer.account.UpdatePersonalInformationUseCase;
+import com.hexagonal.application.usecase.customer.account.ViewOrderHistoryUseCase;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.vo.Email;
 import org.junit.jupiter.api.DisplayName;
@@ -37,19 +37,19 @@ class CustomerAccountRestControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private RegisterAccountInputPort registerAccountInputPort;
+    private RegisterAccountUseCase registerAccountUseCase;
 
     @MockBean
-    private LoginInputPort loginInputPort;
+    private LoginUseCase loginUseCase;
 
     @MockBean
-    private LogoutInputPort logoutInputPort;
+    private LogoutUseCase logoutUseCase;
 
     @MockBean
-    private UpdatePersonalInformationInputPort updatePersonalInformationInputPort;
+    private UpdatePersonalInformationUseCase updatePersonalInformationUseCase;
 
     @MockBean
-    private ViewOrderHistoryInputPort viewOrderHistoryInputPort;
+    private ViewOrderHistoryUseCase viewOrderHistoryUseCase;
 
     @Test
     @DisplayName("POST /api/customer/account/register - Should register customer successfully")
@@ -63,7 +63,7 @@ class CustomerAccountRestControllerTest {
         );
         Customer customer = Customer.create("John", "Doe", Email.of("john.doe@example.com"));
         
-        when(registerAccountInputPort.execute(any(RegisterAccountCommand.class)))
+        when(registerAccountUseCase.execute(any(RegisterAccountCommand.class)))
             .thenReturn(customer);
 
         // When & Then
@@ -84,7 +84,7 @@ class CustomerAccountRestControllerTest {
         LoginCommand command = new LoginCommand("john.doe@example.com", "password123");
         Customer customer = Customer.create("John", "Doe", Email.of("john.doe@example.com"));
         
-        when(loginInputPort.execute(any(LoginCommand.class))).thenReturn(customer);
+        when(loginUseCase.execute(any(LoginCommand.class))).thenReturn(customer);
 
         // When & Then
         mockMvc.perform(post("/api/customer/account/login")

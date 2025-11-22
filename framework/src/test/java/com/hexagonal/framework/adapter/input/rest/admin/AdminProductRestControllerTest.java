@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.ManageStockCommand;
 import com.hexagonal.application.dto.UpdateProductCommand;
-import com.hexagonal.application.ports.input.admin.product.CreateProductInputPort;
-import com.hexagonal.application.ports.input.admin.product.ManageProductStockInputPort;
-import com.hexagonal.application.ports.input.admin.product.RemoveProductInputPort;
-import com.hexagonal.application.ports.input.admin.product.UpdateProductInputPort;
+import com.hexagonal.application.usecase.admin.product.CreateProductUseCase;
+import com.hexagonal.application.usecase.admin.product.ManageProductStockUseCase;
+import com.hexagonal.application.usecase.admin.product.RemoveProductUseCase;
+import com.hexagonal.application.usecase.admin.product.UpdateProductUseCase;
 import com.hexagonal.entity.Product;
 import com.hexagonal.vo.Money;
 import org.junit.jupiter.api.DisplayName;
@@ -40,16 +40,16 @@ class AdminProductRestControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CreateProductInputPort createProductInputPort;
+    private CreateProductUseCase createProductUseCase;
 
     @MockBean
-    private UpdateProductInputPort updateProductInputPort;
+    private UpdateProductUseCase updateProductUseCase;
 
     @MockBean
-    private RemoveProductInputPort removeProductInputPort;
+    private RemoveProductUseCase removeProductUseCase;
 
     @MockBean
-    private ManageProductStockInputPort manageProductStockInputPort;
+    private ManageProductStockUseCase manageProductStockUseCase;
 
     private static final Currency USD = Currency.getInstance("USD");
 
@@ -78,7 +78,7 @@ class AdminProductRestControllerTest {
             command.getSku()
         );
         
-        when(createProductInputPort.execute(any(CreateProductCommand.class)))
+        when(createProductUseCase.execute(any(CreateProductCommand.class)))
             .thenReturn(product);
 
         // When & Then
@@ -110,7 +110,7 @@ class AdminProductRestControllerTest {
             "PROD-001"
         );
         
-        when(updateProductInputPort.execute(any(UpdateProductCommand.class)))
+        when(updateProductUseCase.execute(any(UpdateProductCommand.class)))
             .thenReturn(product);
 
         // When & Then
@@ -126,13 +126,13 @@ class AdminProductRestControllerTest {
     void shouldDeleteProductSuccessfully() throws Exception {
         // Given
         String productId = "123e4567-e89b-12d3-a456-426614174000";
-        doNothing().when(removeProductInputPort).execute(anyString());
+        doNothing().when(removeProductUseCase).execute(anyString());
 
         // When & Then
         mockMvc.perform(delete("/api/admin/products/{productId}", productId))
             .andExpect(status().isNoContent());
         
-        verify(removeProductInputPort).execute(productId);
+        verify(removeProductUseCase).execute(productId);
     }
 
     @Test
@@ -151,7 +151,7 @@ class AdminProductRestControllerTest {
             "PROD-001"
         );
         
-        when(manageProductStockInputPort.execute(any(ManageStockCommand.class)))
+        when(manageProductStockUseCase.execute(any(ManageStockCommand.class)))
             .thenReturn(product);
 
         // When & Then
