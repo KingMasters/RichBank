@@ -2,12 +2,12 @@ package com.hexagonal.framework.adapter.input.grpc.admin;
 
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.UpdateProductCommand;
-import com.hexagonal.application.usecase.admin.order.UpdateOrderStatusUseCase;
-import com.hexagonal.application.usecase.admin.order.ViewAllOrdersUseCase;
-import com.hexagonal.application.usecase.admin.product.CreateProductUseCase;
-import com.hexagonal.application.usecase.admin.product.UpdateProductUseCase;
-import com.hexagonal.application.usecase.admin.user.ToggleCustomerActiveUseCase;
-import com.hexagonal.application.usecase.admin.user.ViewCustomersUseCase;
+import com.hexagonal.application.port.in.admin.order.UpdateOrderStatusInputPort;
+import com.hexagonal.application.port.in.admin.order.ViewAllOrdersInputPort;
+import com.hexagonal.application.port.in.admin.product.CreateProductInputPort;
+import com.hexagonal.application.port.in.admin.product.UpdateProductInputPort;
+import com.hexagonal.application.port.in.admin.user.ToggleCustomerActiveInputPort;
+import com.hexagonal.application.port.in.admin.user.ViewCustomersInputPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
 import com.hexagonal.entity.Product;
@@ -33,27 +33,27 @@ import java.util.stream.Collectors;
 @GrpcService
 public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
     
-    private final CreateProductUseCase createProductUseCase;
-    private final UpdateProductUseCase updateProductUseCase;
-    private final ViewAllOrdersUseCase viewAllOrdersUseCase;
-    private final UpdateOrderStatusUseCase updateOrderStatusUseCase;
-    private final ViewCustomersUseCase viewCustomersUseCase;
-    private final ToggleCustomerActiveUseCase toggleCustomerActiveUseCase;
+    private final CreateProductInputPort createProductInputPort;
+    private final UpdateProductInputPort updateProductInputPort;
+    private final ViewAllOrdersInputPort viewAllOrdersInputPort;
+    private final UpdateOrderStatusInputPort updateOrderStatusInputPort;
+    private final ViewCustomersInputPort viewCustomersInputPort;
+    private final ToggleCustomerActiveInputPort toggleCustomerActiveInputPort;
     
     @Autowired
     public AdminGrpcService(
-            CreateProductUseCase createProductUseCase,
-            UpdateProductUseCase updateProductUseCase,
-            ViewAllOrdersUseCase viewAllOrdersUseCase,
-            UpdateOrderStatusUseCase updateOrderStatusUseCase,
-            ViewCustomersUseCase viewCustomersUseCase,
-            ToggleCustomerActiveUseCase toggleCustomerActiveUseCase) {
-        this.createProductUseCase = createProductUseCase;
-        this.updateProductUseCase = updateProductUseCase;
-        this.viewAllOrdersUseCase = viewAllOrdersUseCase;
-        this.updateOrderStatusUseCase = updateOrderStatusUseCase;
-        this.viewCustomersUseCase = viewCustomersUseCase;
-        this.toggleCustomerActiveUseCase = toggleCustomerActiveUseCase;
+            CreateProductInputPort createProductInputPort,
+            UpdateProductInputPort updateProductInputPort,
+            ViewAllOrdersInputPort viewAllOrdersInputPort,
+            UpdateOrderStatusInputPort updateOrderStatusInputPort,
+            ViewCustomersInputPort viewCustomersInputPort,
+            ToggleCustomerActiveInputPort toggleCustomerActiveInputPort) {
+        this.createProductInputPort = createProductInputPort;
+        this.updateProductInputPort = updateProductInputPort;
+        this.viewAllOrdersInputPort = viewAllOrdersInputPort;
+        this.updateOrderStatusInputPort = updateOrderStatusInputPort;
+        this.viewCustomersInputPort = viewCustomersInputPort;
+        this.toggleCustomerActiveInputPort = toggleCustomerActiveInputPort;
     }
     
     @Override
@@ -74,7 +74,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
                 /* height */ null,
                 /* dimensionUnit */ null
             );
-            Product product = createProductUseCase.execute(command);
+            Product product = createProductInputPort.execute(command);
             
             ProductResponse response = toProductResponse(product);
             responseObserver.onNext(response);
@@ -102,7 +102,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
                 /* height */ null,
                 /* dimensionUnit */ null
             );
-            Product product = updateProductUseCase.execute(command);
+            Product product = updateProductInputPort.execute(command);
             
             ProductResponse response = toProductResponse(product);
             responseObserver.onNext(response);
@@ -115,7 +115,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
     @Override
     public void viewAllOrders(ViewAllOrdersRequest request, StreamObserver<ListOrdersResponse> responseObserver) {
         try {
-            List<Order> orders = viewAllOrdersUseCase.execute();
+            List<Order> orders = viewAllOrdersInputPort.execute();
             
             ListOrdersResponse response = ListOrdersResponse.newBuilder()
                 .addAllOrders(orders.stream()
@@ -133,7 +133,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
     @Override
     public void updateOrderStatus(UpdateOrderStatusRequest request, StreamObserver<OrderResponse> responseObserver) {
         try {
-            Order order = updateOrderStatusUseCase.execute(
+            Order order = updateOrderStatusInputPort.execute(
                 ID.of(request.getOrderId()),
                 OrderStatus.valueOf(request.getStatus())
             );
@@ -149,7 +149,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
     @Override
     public void viewCustomers(ViewCustomersRequest request, StreamObserver<ListCustomersResponse> responseObserver) {
         try {
-            List<Customer> customers = viewCustomersUseCase.execute();
+            List<Customer> customers = viewCustomersInputPort.execute();
             
             ListCustomersResponse response = ListCustomersResponse.newBuilder()
                 .addAllCustomers(customers.stream()
@@ -167,7 +167,7 @@ public class AdminGrpcService extends AdminServiceGrpc.AdminServiceImplBase {
     @Override
     public void toggleCustomerActive(ToggleCustomerActiveRequest request, StreamObserver<CustomerResponse> responseObserver) {
         try {
-            Customer customer = toggleCustomerActiveUseCase.execute(
+            Customer customer = toggleCustomerActiveInputPort.execute(
                 ID.of(request.getCustomerId()),
                 request.getEnable()
             );
