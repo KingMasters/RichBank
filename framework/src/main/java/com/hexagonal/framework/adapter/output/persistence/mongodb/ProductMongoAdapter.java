@@ -1,6 +1,6 @@
 package com.hexagonal.framework.adapter.output.persistence.mongodb;
 
-import com.hexagonal.application.port.out.ProductRepositoryOutputPort;
+import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.ProductDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.ProductMongoRepository;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @ConditionalOnProperty(name = "spring.data.mongodb.uri")
-public class ProductMongoAdapter implements ProductRepositoryOutputPort {
+public class ProductMongoAdapter implements ProductRepositoryPort {
     
     private final ProductMongoRepository mongoRepository;
     

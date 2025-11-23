@@ -1,13 +1,13 @@
 package com.hexagonal.framework.adapter.input.grpc.customer;
 
 import com.hexagonal.application.dto.*;
-import com.hexagonal.application.port.in.customer.account.LoginInputPort;
-import com.hexagonal.application.port.in.customer.account.RegisterAccountInputPort;
-import com.hexagonal.application.port.in.customer.cart.AddProductToCartInputPort;
-import com.hexagonal.application.port.in.customer.cart.ViewCartInputPort;
-import com.hexagonal.application.port.in.customer.catalog.ListAllProductsInputPort;
-import com.hexagonal.application.port.in.customer.catalog.SearchProductsInputPort;
-import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseInputPort;
+import com.hexagonal.application.port.in.customer.account.LoginUseCase;
+import com.hexagonal.application.port.in.customer.account.RegisterAccountUseCase;
+import com.hexagonal.application.port.in.customer.cart.AddProductToCartUseCase;
+import com.hexagonal.application.port.in.customer.cart.ViewCartUseCase;
+import com.hexagonal.application.port.in.customer.catalog.ListAllProductsUseCase;
+import com.hexagonal.application.port.in.customer.catalog.SearchProductsUseCase;
+import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseUseCase;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
@@ -30,30 +30,30 @@ import java.util.stream.Collectors;
 @GrpcService
 public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImplBase {
     
-    private final RegisterAccountInputPort registerAccountInputPort;
-    private final LoginInputPort loginInputPort;
-    private final ListAllProductsInputPort listAllProductsInputPort;
-    private final SearchProductsInputPort searchProductsInputPort;
-    private final ViewCartInputPort viewCartInputPort;
-    private final AddProductToCartInputPort addProductToCartInputPort;
-    private final CompletePurchaseInputPort completePurchaseInputPort;
+    private final RegisterAccountUseCase registerAccountUseCase;
+    private final LoginUseCase loginUseCase;
+    private final ListAllProductsUseCase listAllProductsUseCase;
+    private final SearchProductsUseCase searchProductsUseCase;
+    private final ViewCartUseCase viewCartUseCase;
+    private final AddProductToCartUseCase addProductToCartUseCase;
+    private final CompletePurchaseUseCase completePurchaseUseCase;
     
     @Autowired
     public CustomerGrpcService(
-            RegisterAccountInputPort registerAccountInputPort,
-            LoginInputPort loginInputPort,
-            ListAllProductsInputPort listAllProductsInputPort,
-            SearchProductsInputPort searchProductsInputPort,
-            ViewCartInputPort viewCartInputPort,
-            AddProductToCartInputPort addProductToCartInputPort,
-            CompletePurchaseInputPort completePurchaseInputPort) {
-        this.registerAccountInputPort = registerAccountInputPort;
-        this.loginInputPort = loginInputPort;
-        this.listAllProductsInputPort = listAllProductsInputPort;
-        this.searchProductsInputPort = searchProductsInputPort;
-        this.viewCartInputPort = viewCartInputPort;
-        this.addProductToCartInputPort = addProductToCartInputPort;
-        this.completePurchaseInputPort = completePurchaseInputPort;
+            RegisterAccountUseCase registerAccountUseCase,
+            LoginUseCase loginUseCase,
+            ListAllProductsUseCase listAllProductsUseCase,
+            SearchProductsUseCase searchProductsUseCase,
+            ViewCartUseCase viewCartUseCase,
+            AddProductToCartUseCase addProductToCartUseCase,
+            CompletePurchaseUseCase completePurchaseUseCase) {
+        this.registerAccountUseCase = registerAccountUseCase;
+        this.loginUseCase = loginUseCase;
+        this.listAllProductsUseCase = listAllProductsUseCase;
+        this.searchProductsUseCase = searchProductsUseCase;
+        this.viewCartUseCase = viewCartUseCase;
+        this.addProductToCartUseCase = addProductToCartUseCase;
+        this.completePurchaseUseCase = completePurchaseUseCase;
     }
     
     @Override
@@ -65,7 +65,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
                 request.getEmail(),
                 request.getPhoneNumber()
             );
-            Customer customer = registerAccountInputPort.execute(command);
+            Customer customer = registerAccountUseCase.execute(command);
             
             CustomerResponse response = CustomerResponse.newBuilder()
                 .setId(customer.getId().getValue().toString())
@@ -86,7 +86,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
     public void login(LoginRequest request, StreamObserver<CustomerResponse> responseObserver) {
         try {
             LoginCommand command = new LoginCommand(request.getEmail(), request.getPassword());
-            Customer customer = loginInputPort.execute(command);
+            Customer customer = loginUseCase.execute(command);
             
             CustomerResponse response = CustomerResponse.newBuilder()
                 .setId(customer.getId().getValue().toString())
@@ -106,7 +106,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
     @Override
     public void listProducts(ListProductsRequest request, StreamObserver<ListProductsResponse> responseObserver) {
         try {
-            List<Product> products = listAllProductsInputPort.execute();
+            List<Product> products = listAllProductsUseCase.execute();
             
             ListProductsResponse response = ListProductsResponse.newBuilder()
                 .addAllProducts(products.stream()
@@ -125,7 +125,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
     public void searchProducts(SearchProductsRequest request, StreamObserver<ListProductsResponse> responseObserver) {
         try {
             SearchProductsCommand command = new SearchProductsCommand(request.getSearchTerm());
-            List<Product> products = searchProductsInputPort.execute(command);
+            List<Product> products = searchProductsUseCase.execute(command);
             
             ListProductsResponse response = ListProductsResponse.newBuilder()
                 .addAllProducts(products.stream()
@@ -144,7 +144,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
     public void viewCart(ViewCartRequest request, StreamObserver<CartResponse> responseObserver) {
         try {
             ViewCartCommand command = new ViewCartCommand(request.getCustomerId());
-            Cart cart = viewCartInputPort.execute(command);
+            Cart cart = viewCartUseCase.execute(command);
             
             CartResponse response = CartResponse.newBuilder()
                 .setId(cart.getId().getValue().toString())
@@ -174,7 +174,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
                 /* unitPrice */ null,
                 /* currency */ null
             );
-            Cart cart = addProductToCartInputPort.execute(command);
+            Cart cart = addProductToCartUseCase.execute(command);
             
             CartResponse response = CartResponse.newBuilder()
                 .setId(cart.getId().getValue().toString())
@@ -204,7 +204,7 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
                 /* paymentMethod */ null,
                 /* discountCode */ null
             );
-            Order order = completePurchaseInputPort.execute(command);
+            Order order = completePurchaseUseCase.execute(command);
             
             OrderResponse response = OrderResponse.newBuilder()
                 .setId(order.getId().getValue().toString())

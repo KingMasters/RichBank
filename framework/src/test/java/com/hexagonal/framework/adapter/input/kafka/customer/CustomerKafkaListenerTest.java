@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.AddProductToCartCommand;
 import com.hexagonal.application.dto.CompletePurchaseCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
-import com.hexagonal.application.usecase.customer.cart.AddProductToCartUseCase;
-import com.hexagonal.application.usecase.customer.checkout.CompletePurchaseUseCase;
-import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCase;
+import com.hexagonal.application.usecase.customer.cart.AddProductToCartUseCaseHandler;
+import com.hexagonal.application.usecase.customer.checkout.CompletePurchaseUseCaseHandler;
+import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCaseHandler;
 import com.hexagonal.entity.Cart;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
@@ -34,13 +34,13 @@ class CustomerKafkaListenerTest {
     private ObjectMapper objectMapper;
 
     @Mock
-    private RegisterAccountUseCase registerAccountUseCase;
+    private RegisterAccountUseCaseHandler registerAccountUseCaseHandler;
 
     @Mock
-    private AddProductToCartUseCase addProductToCartUseCase;
+    private AddProductToCartUseCaseHandler addProductToCartUseCaseHandler;
 
     @Mock
-    private CompletePurchaseUseCase completePurchaseUseCase;
+    private CompletePurchaseUseCaseHandler completePurchaseUseCaseHandler;
 
     @Mock
     private Acknowledgment acknowledgment;
@@ -70,14 +70,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, RegisterAccountCommand.class))
             .thenReturn(command);
-        when(registerAccountUseCase.execute(any(RegisterAccountCommand.class)))
+        when(registerAccountUseCaseHandler.execute(any(RegisterAccountCommand.class)))
             .thenReturn(customer);
 
         // When
         listener.handleCustomerRegister(message, "customer.register", acknowledgment);
 
         // Then
-        verify(registerAccountUseCase).execute(any(RegisterAccountCommand.class));
+        verify(registerAccountUseCaseHandler).execute(any(RegisterAccountCommand.class));
         verify(acknowledgment).acknowledge();
     }
 
@@ -97,14 +97,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, AddProductToCartCommand.class))
             .thenReturn(command);
-        when(addProductToCartUseCase.execute(any(AddProductToCartCommand.class)))
+        when(addProductToCartUseCaseHandler.execute(any(AddProductToCartCommand.class)))
             .thenReturn(cart);
 
         // When
         listener.handleAddToCart(message, "customer.add-to-cart", acknowledgment);
 
         // Then
-        verify(addProductToCartUseCase).execute(any(AddProductToCartCommand.class));
+        verify(addProductToCartUseCaseHandler).execute(any(AddProductToCartCommand.class));
         verify(acknowledgment).acknowledge();
     }
 
@@ -124,14 +124,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, CompletePurchaseCommand.class))
             .thenReturn(command);
-        when(completePurchaseUseCase.execute(any(CompletePurchaseCommand.class)))
+        when(completePurchaseUseCaseHandler.execute(any(CompletePurchaseCommand.class)))
             .thenReturn(order);
 
         // When
         listener.handleCompletePurchase(message, "customer.complete-purchase", acknowledgment);
 
         // Then
-        verify(completePurchaseUseCase).execute(any(CompletePurchaseCommand.class));
+        verify(completePurchaseUseCaseHandler).execute(any(CompletePurchaseCommand.class));
         verify(acknowledgment).acknowledge();
     }
 }
