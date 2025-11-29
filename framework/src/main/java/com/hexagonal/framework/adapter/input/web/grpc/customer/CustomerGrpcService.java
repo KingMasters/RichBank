@@ -143,8 +143,8 @@ public class CustomerGrpcService extends CustomerServiceGrpc.CustomerServiceImpl
     @Override
     public void viewCart(ViewCartRequest request, StreamObserver<CartResponse> responseObserver) {
         try {
-            ViewCartCommand command = new ViewCartCommand(request.getCustomerId());
-            Cart cart = viewCartUseCase.execute(command);
+            ViewCartUseCase.ViewCartQuery query = new ViewCartUseCase.ViewCartQuery(request.getCustomerId());
+            Cart cart = viewCartUseCase.execute(query);
             
             CartResponse response = CartResponse.newBuilder()
                 .setId(cart.getId().getValue().toString())

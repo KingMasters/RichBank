@@ -1,7 +1,6 @@
 package com.hexagonal.application.service.customer.account;
 
 import com.hexagonal.application.common.UseCase;
-import com.hexagonal.application.dto.ViewOrderHistoryCommand;
 import com.hexagonal.application.port.in.customer.account.ViewOrderHistoryUseCase;
 import com.hexagonal.application.port.out.OrderRepositoryPort;
 import com.hexagonal.domain.entity.Order;
@@ -18,12 +17,12 @@ public class ViewOrderHistoryService implements ViewOrderHistoryUseCase {
     }
 
     @Override
-    public List<Order> execute(ViewOrderHistoryCommand command) {
-        if (command == null) {
+    public List<Order> execute(ViewOrderHistoryQuery query) {
+        if (query == null) {
             throw new IllegalArgumentException("ViewOrderHistoryCommand cannot be null");
         }
 
-        ID customerId = ID.of(command.getCustomerId());
+        ID customerId = ID.of(query.customerId());
         return orderRepository.findByCustomerId(customerId);
     }
 }

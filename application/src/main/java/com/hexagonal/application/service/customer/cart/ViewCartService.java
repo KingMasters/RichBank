@@ -1,7 +1,6 @@
 package com.hexagonal.application.service.customer.cart;
 
 import com.hexagonal.application.common.UseCase;
-import com.hexagonal.application.dto.ViewCartCommand;
 import com.hexagonal.application.port.in.customer.cart.ViewCartUseCase;
 import com.hexagonal.application.port.out.CartRepositoryPort;
 import com.hexagonal.domain.entity.Cart;
@@ -17,14 +16,14 @@ public class ViewCartService implements ViewCartUseCase {
     }
 
     @Override
-    public Cart execute(ViewCartCommand command) {
-        if (command == null) {
+    public Cart execute(ViewCartQuery query) {
+        if (query == null) {
             throw new IllegalArgumentException("ViewCartCommand cannot be null");
         }
 
-        ID customerId = ID.of(command.getCustomerId());
+        ID customerId = ID.of(query.customerId());
         return cartRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + command.getCustomerId() + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + query.customerId() + " not found"));
     }
 }
 

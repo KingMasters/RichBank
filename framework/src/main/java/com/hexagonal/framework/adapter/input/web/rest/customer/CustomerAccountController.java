@@ -3,14 +3,15 @@ package com.hexagonal.framework.adapter.input.web.rest.customer;
 import com.hexagonal.application.dto.LoginCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
 import com.hexagonal.application.dto.UpdatePersonalInformationCommand;
-import com.hexagonal.application.dto.ViewOrderHistoryCommand;
 import com.hexagonal.application.port.in.customer.account.*;
+import com.hexagonal.application.port.in.customer.account.ViewOrderHistoryUseCase.ViewOrderHistoryQuery;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.entity.Order;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -64,8 +65,8 @@ public class CustomerAccountController {
     
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> viewOrderHistory(@RequestParam String customerId) {
-        ViewOrderHistoryCommand command = new ViewOrderHistoryCommand(customerId);
-        List<Order> orders = viewOrderHistoryUseCase.execute(command);
+        ViewOrderHistoryQuery query = new ViewOrderHistoryQuery(customerId);
+        List<Order> orders = viewOrderHistoryUseCase.execute(query);
         return ResponseEntity.ok(orders);
     }
 }

@@ -3,7 +3,6 @@ package com.hexagonal.framework.adapter.input.web.rest.customer;
 import com.hexagonal.application.dto.AddProductToCartCommand;
 import com.hexagonal.application.dto.RemoveProductFromCartCommand;
 import com.hexagonal.application.dto.UpdateProductQuantityInCartCommand;
-import com.hexagonal.application.dto.ViewCartCommand;
 import com.hexagonal.application.port.in.customer.cart.AddProductToCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.RemoveProductFromCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.UpdateProductQuantityInCartUseCase;
@@ -54,8 +53,8 @@ public class CustomerCartController {
     
     @GetMapping("/view")
     public ResponseEntity<Cart> viewCart(@RequestParam String customerId) {
-        ViewCartCommand command = new ViewCartCommand(customerId);
-        Cart cart = viewCartUseCase.execute(command);
+        ViewCartUseCase.ViewCartQuery query = new ViewCartUseCase.ViewCartQuery(customerId);
+        Cart cart = viewCartUseCase.execute(query);
         return ResponseEntity.ok(cart);
     }
 }
