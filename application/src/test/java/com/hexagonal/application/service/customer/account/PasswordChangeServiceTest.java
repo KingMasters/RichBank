@@ -2,6 +2,7 @@ package com.hexagonal.application.service.customer.account;
 
 import com.hexagonal.application.dto.ChangePasswordCommand;
 import com.hexagonal.application.port.out.CustomerRepositoryPort;
+import com.hexagonal.application.service.command.customer.account.PasswordChangeService;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.vo.Email;
 import com.hexagonal.domain.vo.ID;

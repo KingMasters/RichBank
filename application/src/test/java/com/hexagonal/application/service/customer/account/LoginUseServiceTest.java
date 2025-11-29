@@ -2,6 +2,7 @@ package com.hexagonal.application.service.customer.account;
 
 import com.hexagonal.application.dto.LoginCommand;
 import com.hexagonal.application.port.out.CustomerRepositoryPort;
+import com.hexagonal.application.service.command.customer.account.LoginUseService;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.vo.Email;

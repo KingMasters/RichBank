@@ -2,6 +2,7 @@ package com.hexagonal.application.service.admin.product;
 
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.port.out.ProductRepositoryPort;
+import com.hexagonal.application.service.command.admin.product.CreateProductService;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.DuplicateEntityException;
 import com.hexagonal.domain.service.ProductDomainService;
