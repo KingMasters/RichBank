@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.grpc.customer;
+package com.hexagonal.framework.adapter.input.web.grpc.customer;
 
 import com.hexagonal.application.dto.*;
 import com.hexagonal.application.port.in.customer.account.LoginUseCase;

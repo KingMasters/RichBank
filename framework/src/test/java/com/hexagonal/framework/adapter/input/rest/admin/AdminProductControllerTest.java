@@ -9,6 +9,7 @@ import com.hexagonal.application.usecase.admin.product.ManageProductStockUseCase
 import com.hexagonal.application.usecase.admin.product.RemoveProductUseCaseHandler;
 import com.hexagonal.application.usecase.admin.product.UpdateProductUseCaseHandler;
 import com.hexagonal.entity.Product;
+import com.hexagonal.framework.adapter.input.web.rest.admin.AdminProductController;
 import com.hexagonal.vo.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Disabled;
@@ -27,11 +28,11 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = AdminProductRestController.class, 
+@WebMvcTest(controllers = AdminProductController.class,
     useDefaultFilters = false)
 @DisplayName("AdminProductRestController Contract Tests")
 @Disabled("Disabled in CI: requires application context and DB beans that aren't available in test environment")
-class AdminProductRestControllerTest {
+class AdminProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

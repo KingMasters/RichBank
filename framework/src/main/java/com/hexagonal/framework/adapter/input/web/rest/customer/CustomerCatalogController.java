@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.rest.customer;
+package com.hexagonal.framework.adapter.input.web.rest.customer;
 
 import com.hexagonal.application.dto.FilterProductsByCategoryCommand;
 import com.hexagonal.application.dto.SearchProductsCommand;
@@ -8,21 +8,23 @@ import com.hexagonal.application.port.in.customer.catalog.ListAllProductsUseCase
 import com.hexagonal.application.port.in.customer.catalog.SearchProductsUseCase;
 import com.hexagonal.application.port.in.customer.catalog.SortProductsUseCase;
 import com.hexagonal.entity.Product;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/customer/catalog")
-public class CustomerCatalogRestController {
+public class CustomerCatalogController {
     
     private final ListAllProductsUseCase listAllProductsUseCase;
     private final SearchProductsUseCase searchProductsUseCase;
     private final FilterProductsByCategoryUseCase filterProductsByCategoryUseCase;
     private final SortProductsUseCase sortProductsUseCase;
     
-    public CustomerCatalogRestController(
+    public CustomerCatalogController(
             ListAllProductsUseCase listAllProductsUseCase,
             SearchProductsUseCase searchProductsUseCase,
             FilterProductsByCategoryUseCase filterProductsByCategoryUseCase,

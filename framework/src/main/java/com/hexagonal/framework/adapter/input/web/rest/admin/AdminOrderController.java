@@ -1,24 +1,26 @@
-package com.hexagonal.framework.adapter.input.rest.admin;
+package com.hexagonal.framework.adapter.input.web.rest.admin;
 
 import com.hexagonal.application.dto.RefundCommand;
 import com.hexagonal.application.port.in.admin.order.HandleReturnOrRefundUseCase;
 import com.hexagonal.application.port.in.admin.order.UpdateOrderStatusUseCase;
 import com.hexagonal.application.port.in.admin.order.ViewAllOrdersUseCase;
 import com.hexagonal.entity.Order;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/admin/orders")
-public class AdminOrderRestController {
+public class AdminOrderController {
     
     private final ViewAllOrdersUseCase viewAllOrdersUseCase;
     private final UpdateOrderStatusUseCase updateOrderStatusUseCase;
     private final HandleReturnOrRefundUseCase handleReturnOrRefundUseCase;
     
-    public AdminOrderRestController(
+    public AdminOrderController(
             ViewAllOrdersUseCase viewAllOrdersUseCase,
             UpdateOrderStatusUseCase updateOrderStatusUseCase,
             HandleReturnOrRefundUseCase handleReturnOrRefundUseCase) {

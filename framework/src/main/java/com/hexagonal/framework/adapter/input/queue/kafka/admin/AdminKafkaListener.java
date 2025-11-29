@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.kafka.admin;
+package com.hexagonal.framework.adapter.input.queue.kafka.admin;
 
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.SupportIssueCommand;
@@ -6,6 +6,7 @@ import com.hexagonal.application.port.in.admin.product.CreateProductUseCase;
 import com.hexagonal.application.port.in.admin.user.HandleSupportIssueUseCase;
 import com.hexagonal.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hexagonal.framework.common.QueueAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Component;
  * - admin.create-product
  * - admin.handle-support-issue
  */
-@Component
+@QueueAdapter
 public class AdminKafkaListener {
     
     private static final Logger logger = LoggerFactory.getLogger(AdminKafkaListener.class);

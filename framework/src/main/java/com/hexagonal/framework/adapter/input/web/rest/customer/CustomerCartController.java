@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.rest.customer;
+package com.hexagonal.framework.adapter.input.web.rest.customer;
 
 import com.hexagonal.application.dto.AddProductToCartCommand;
 import com.hexagonal.application.dto.RemoveProductFromCartCommand;
@@ -9,19 +9,21 @@ import com.hexagonal.application.port.in.customer.cart.RemoveProductFromCartUseC
 import com.hexagonal.application.port.in.customer.cart.UpdateProductQuantityInCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.ViewCartUseCase;
 import com.hexagonal.entity.Cart;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/customer/cart")
-public class CustomerCartRestController {
+public class CustomerCartController {
     
     private final AddProductToCartUseCase addProductToCartUseCase;
     private final RemoveProductFromCartUseCase removeProductFromCartUseCase;
     private final UpdateProductQuantityInCartUseCase updateProductQuantityInCartUseCase;
     private final ViewCartUseCase viewCartUseCase;
     
-    public CustomerCartRestController(
+    public CustomerCartController(
             AddProductToCartUseCase addProductToCartUseCase,
             RemoveProductFromCartUseCase removeProductFromCartUseCase,
             UpdateProductQuantityInCartUseCase updateProductQuantityInCartUseCase,

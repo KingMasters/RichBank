@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.rest.admin;
+package com.hexagonal.framework.adapter.input.web.rest.admin;
 
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.ManageStockCommand;
@@ -8,20 +8,22 @@ import com.hexagonal.application.port.in.admin.product.ManageProductStockUseCase
 import com.hexagonal.application.port.in.admin.product.RemoveProductUseCase;
 import com.hexagonal.application.port.in.admin.product.UpdateProductUseCase;
 import com.hexagonal.entity.Product;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/admin/products")
-public class AdminProductRestController {
+public class AdminProductController {
     
     private final CreateProductUseCase createProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
     private final RemoveProductUseCase removeProductUseCase;
     private final ManageProductStockUseCase manageProductStockUseCase;
     
-    public AdminProductRestController(
+    public AdminProductController(
             CreateProductUseCase createProductUseCase,
             UpdateProductUseCase updateProductUseCase,
             RemoveProductUseCase removeProductUseCase,

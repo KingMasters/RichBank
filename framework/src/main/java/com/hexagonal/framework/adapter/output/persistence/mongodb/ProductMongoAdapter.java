@@ -4,6 +4,7 @@ import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.ProductDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.ProductMongoRepository;
+import com.hexagonal.framework.common.PersistenceAdapter;
 import com.hexagonal.vo.ID;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@PersistenceAdapter
 @ConditionalOnProperty(name = "spring.data.mongodb.uri")
 public class ProductMongoAdapter implements ProductRepositoryPort {
     

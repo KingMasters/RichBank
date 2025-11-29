@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.rest.customer;
+package com.hexagonal.framework.adapter.input.web.rest.customer;
 
 import com.hexagonal.application.dto.ApplyDiscountCodeCommand;
 import com.hexagonal.application.dto.CompletePurchaseCommand;
@@ -9,19 +9,21 @@ import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseUseCa
 import com.hexagonal.application.port.in.customer.checkout.EnterShippingInformationUseCase;
 import com.hexagonal.application.port.in.customer.checkout.SelectPaymentMethodUseCase;
 import com.hexagonal.entity.Order;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/customer/checkout")
-public class CustomerCheckoutRestController {
+public class CustomerCheckoutController {
     
     private final EnterShippingInformationUseCase enterShippingInformationUseCase;
     private final SelectPaymentMethodUseCase selectPaymentMethodUseCase;
     private final ApplyDiscountCodeUseCase applyDiscountCodeUseCase;
     private final CompletePurchaseUseCase completePurchaseUseCase;
     
-    public CustomerCheckoutRestController(
+    public CustomerCheckoutController(
             EnterShippingInformationUseCase enterShippingInformationUseCase,
             SelectPaymentMethodUseCase selectPaymentMethodUseCase,
             ApplyDiscountCodeUseCase applyDiscountCodeUseCase,

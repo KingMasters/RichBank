@@ -9,6 +9,7 @@ import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCase
 import com.hexagonal.application.usecase.customer.account.UpdatePersonalInformationUseCaseHandler;
 import com.hexagonal.application.usecase.customer.account.ViewOrderHistoryUseCaseHandler;
 import com.hexagonal.entity.Customer;
+import com.hexagonal.framework.adapter.input.web.rest.customer.CustomerAccountController;
 import com.hexagonal.vo.Email;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Disabled;
@@ -24,11 +25,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = CustomerAccountRestController.class,
+@WebMvcTest(controllers = CustomerAccountController.class,
     useDefaultFilters = false)
 @DisplayName("CustomerAccountRestController Contract Tests")
 @Disabled("Disabled in CI: requires application context/beans not available in test environment")
-class CustomerAccountRestControllerTest {
+class CustomerAccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

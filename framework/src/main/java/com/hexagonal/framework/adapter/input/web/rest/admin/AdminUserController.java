@@ -1,24 +1,26 @@
-package com.hexagonal.framework.adapter.input.rest.admin;
+package com.hexagonal.framework.adapter.input.web.rest.admin;
 
 import com.hexagonal.application.dto.SupportIssueCommand;
 import com.hexagonal.application.port.in.admin.user.HandleSupportIssueUseCase;
 import com.hexagonal.application.port.in.admin.user.ToggleCustomerActiveUseCase;
 import com.hexagonal.application.port.in.admin.user.ViewCustomersUseCase;
 import com.hexagonal.entity.Customer;
+import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@WebAdapter
 @RestController
 @RequestMapping("/api/admin/users")
-public class AdminUserRestController {
+public class AdminUserController {
     
     private final ViewCustomersUseCase viewCustomersUseCase;
     private final ToggleCustomerActiveUseCase toggleCustomerActiveUseCase;
     private final HandleSupportIssueUseCase handleSupportIssueUseCase;
     
-    public AdminUserRestController(
+    public AdminUserController(
             ViewCustomersUseCase viewCustomersUseCase,
             ToggleCustomerActiveUseCase toggleCustomerActiveUseCase,
             HandleSupportIssueUseCase handleSupportIssueUseCase) {

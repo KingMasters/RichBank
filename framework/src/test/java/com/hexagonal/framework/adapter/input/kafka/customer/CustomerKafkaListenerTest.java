@@ -10,6 +10,7 @@ import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCase
 import com.hexagonal.entity.Cart;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
+import com.hexagonal.framework.adapter.input.queue.kafka.customer.CustomerKafkaListener;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.junit.jupiter.api.BeforeEach;

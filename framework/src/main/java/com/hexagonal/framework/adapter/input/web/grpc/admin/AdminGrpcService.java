@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.grpc.admin;
+package com.hexagonal.framework.adapter.input.web.grpc.admin;
 
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.UpdateProductCommand;

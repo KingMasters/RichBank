@@ -1,4 +1,4 @@
-package com.hexagonal.framework.adapter.input.kafka.customer;
+package com.hexagonal.framework.adapter.input.queue.kafka.customer;
 
 import com.hexagonal.application.dto.*;
 import com.hexagonal.application.port.in.customer.account.RegisterAccountUseCase;
@@ -9,6 +9,7 @@ import com.hexagonal.entity.Cart;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.entity.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hexagonal.framework.common.QueueAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Component;
  * - customer.add-to-cart
  * - customer.complete-purchase
  */
-@Component
+@QueueAdapter
 public class CustomerKafkaListener {
     
     private static final Logger logger = LoggerFactory.getLogger(CustomerKafkaListener.class);

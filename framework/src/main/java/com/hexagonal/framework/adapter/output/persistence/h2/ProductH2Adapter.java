@@ -4,6 +4,7 @@ import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
+import com.hexagonal.framework.common.PersistenceAdapter;
 import com.hexagonal.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@PersistenceAdapter
 public class ProductH2Adapter implements ProductRepositoryPort {
     
     private final ProductJpaRepository jpaRepository;

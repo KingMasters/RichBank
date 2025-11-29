@@ -4,6 +4,7 @@ import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.CustomerJpaRepository;
+import com.hexagonal.framework.common.PersistenceAdapter;
 import com.hexagonal.vo.Email;
 import com.hexagonal.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@PersistenceAdapter
 public class CustomerH2Adapter implements CustomerRepositoryPort {
     
     private final CustomerJpaRepository jpaRepository;
