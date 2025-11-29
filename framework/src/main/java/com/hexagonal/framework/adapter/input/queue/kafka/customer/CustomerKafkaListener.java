@@ -5,9 +5,9 @@ import com.hexagonal.application.port.in.customer.account.RegisterAccountUseCase
 import com.hexagonal.application.port.in.customer.cart.AddProductToCartUseCase;
 import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseUseCase;
 
-import com.hexagonal.entity.Cart;
-import com.hexagonal.entity.Customer;
-import com.hexagonal.entity.Order;
+import com.hexagonal.domain.entity.Cart;
+import com.hexagonal.domain.entity.Customer;
+import com.hexagonal.domain.entity.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.framework.common.QueueAdapter;
 import org.slf4j.Logger;
@@ -17,7 +17,6 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Component;
 
 /**
  * Kafka Event Listener for Customer Events

@@ -1,7 +1,7 @@
 package com.hexagonal.application.port.out;
 
-import com.hexagonal.entity.Cart;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.entity.Cart;
+import com.hexagonal.domain.vo.ID;
 
 import java.util.Optional;
 

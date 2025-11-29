@@ -4,7 +4,9 @@ import com.hexagonal.application.dto.RefundCommand;
 import com.hexagonal.application.port.in.admin.order.HandleReturnOrRefundUseCase;
 import com.hexagonal.application.port.in.admin.order.UpdateOrderStatusUseCase;
 import com.hexagonal.application.port.in.admin.order.ViewAllOrdersUseCase;
-import com.hexagonal.entity.Order;
+import com.hexagonal.domain.entity.Order;
+import com.hexagonal.domain.vo.ID;
+import com.hexagonal.domain.vo.OrderStatus;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +42,8 @@ public class AdminOrderController {
             @PathVariable String orderId,
             @RequestParam String status) {
         Order order = updateOrderStatusUseCase.execute(
-            com.hexagonal.vo.ID.of(orderId),
-            com.hexagonal.vo.OrderStatus.valueOf(status)
+            ID.of(orderId),
+            OrderStatus.valueOf(status)
         );
         return ResponseEntity.ok(order);
     }
@@ -51,7 +53,7 @@ public class AdminOrderController {
             @RequestParam String orderId,
             @RequestBody RefundCommand command) {
         Order order = handleReturnOrRefundUseCase.execute(
-            com.hexagonal.vo.ID.of(orderId),
+            ID.of(orderId),
             command
         );
         return ResponseEntity.ok(order);

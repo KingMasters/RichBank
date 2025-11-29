@@ -4,7 +4,8 @@ import com.hexagonal.application.dto.SupportIssueCommand;
 import com.hexagonal.application.port.in.admin.user.HandleSupportIssueUseCase;
 import com.hexagonal.application.port.in.admin.user.ToggleCustomerActiveUseCase;
 import com.hexagonal.application.port.in.admin.user.ViewCustomersUseCase;
-import com.hexagonal.entity.Customer;
+import com.hexagonal.domain.entity.Customer;
+import com.hexagonal.domain.vo.ID;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class AdminUserController {
             @PathVariable String customerId,
             @RequestParam boolean enable) {
         Customer customer = toggleCustomerActiveUseCase.execute(
-            com.hexagonal.vo.ID.of(customerId),
+            ID.of(customerId),
             enable
         );
         return ResponseEntity.ok(customer);

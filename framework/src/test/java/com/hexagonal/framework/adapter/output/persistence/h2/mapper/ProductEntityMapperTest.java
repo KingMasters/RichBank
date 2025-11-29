@@ -1,14 +1,13 @@
 package com.hexagonal.framework.adapter.output.persistence.h2.mapper;
 
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
+import com.hexagonal.domain.vo.*;
 import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductEntity;
-import com.hexagonal.vo.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 

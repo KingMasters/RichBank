@@ -4,15 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.AddProductToCartCommand;
 import com.hexagonal.application.dto.CompletePurchaseCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
-import com.hexagonal.application.usecase.customer.cart.AddProductToCartUseCaseHandler;
-import com.hexagonal.application.usecase.customer.checkout.CompletePurchaseUseCaseHandler;
-import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCaseHandler;
-import com.hexagonal.entity.Cart;
-import com.hexagonal.entity.Customer;
-import com.hexagonal.entity.Order;
+import com.hexagonal.application.service.customer.cart.AddProductToCartService;
+import com.hexagonal.application.service.customer.checkout.CompletePurchaseService;
+import com.hexagonal.application.service.customer.account.RegisterAccountService;
+import com.hexagonal.domain.entity.Cart;
+import com.hexagonal.domain.entity.Customer;
+import com.hexagonal.domain.entity.Order;
 import com.hexagonal.framework.adapter.input.queue.kafka.customer.CustomerKafkaListener;
-import com.hexagonal.vo.Email;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.vo.Email;
+import com.hexagonal.domain.vo.ID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Disabled;
@@ -35,13 +35,13 @@ class CustomerKafkaListenerTest {
     private ObjectMapper objectMapper;
 
     @Mock
-    private RegisterAccountUseCaseHandler registerAccountUseCaseHandler;
+    private RegisterAccountService registerAccountService;
 
     @Mock
-    private AddProductToCartUseCaseHandler addProductToCartUseCaseHandler;
+    private AddProductToCartService addProductToCartService;
 
     @Mock
-    private CompletePurchaseUseCaseHandler completePurchaseUseCaseHandler;
+    private CompletePurchaseService completePurchaseService;
 
     @Mock
     private Acknowledgment acknowledgment;
@@ -71,14 +71,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, RegisterAccountCommand.class))
             .thenReturn(command);
-        when(registerAccountUseCaseHandler.execute(any(RegisterAccountCommand.class)))
+        when(registerAccountService.execute(any(RegisterAccountCommand.class)))
             .thenReturn(customer);
 
         // When
         listener.handleCustomerRegister(message, "customer.register", acknowledgment);
 
         // Then
-        verify(registerAccountUseCaseHandler).execute(any(RegisterAccountCommand.class));
+        verify(registerAccountService).execute(any(RegisterAccountCommand.class));
         verify(acknowledgment).acknowledge();
     }
 
@@ -98,14 +98,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, AddProductToCartCommand.class))
             .thenReturn(command);
-        when(addProductToCartUseCaseHandler.execute(any(AddProductToCartCommand.class)))
+        when(addProductToCartService.execute(any(AddProductToCartCommand.class)))
             .thenReturn(cart);
 
         // When
         listener.handleAddToCart(message, "customer.add-to-cart", acknowledgment);
 
         // Then
-        verify(addProductToCartUseCaseHandler).execute(any(AddProductToCartCommand.class));
+        verify(addProductToCartService).execute(any(AddProductToCartCommand.class));
         verify(acknowledgment).acknowledge();
     }
 
@@ -125,14 +125,14 @@ class CustomerKafkaListenerTest {
         
         when(objectMapper.readValue(message, CompletePurchaseCommand.class))
             .thenReturn(command);
-        when(completePurchaseUseCaseHandler.execute(any(CompletePurchaseCommand.class)))
+        when(completePurchaseService.execute(any(CompletePurchaseCommand.class)))
             .thenReturn(order);
 
         // When
         listener.handleCompletePurchase(message, "customer.complete-purchase", acknowledgment);
 
         // Then
-        verify(completePurchaseUseCaseHandler).execute(any(CompletePurchaseCommand.class));
+        verify(completePurchaseService).execute(any(CompletePurchaseCommand.class));
         verify(acknowledgment).acknowledge();
     }
 }

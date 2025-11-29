@@ -8,7 +8,7 @@ import com.hexagonal.application.port.in.customer.checkout.ApplyDiscountCodeUseC
 import com.hexagonal.application.port.in.customer.checkout.CompletePurchaseUseCase;
 import com.hexagonal.application.port.in.customer.checkout.EnterShippingInformationUseCase;
 import com.hexagonal.application.port.in.customer.checkout.SelectPaymentMethodUseCase;
-import com.hexagonal.entity.Order;
+import com.hexagonal.domain.entity.Order;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

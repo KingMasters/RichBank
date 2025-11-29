@@ -1,6 +1,7 @@
 package com.hexagonal.entity;
 
-import com.hexagonal.vo.*;
+import com.hexagonal.domain.entity.Product;
+import com.hexagonal.domain.vo.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

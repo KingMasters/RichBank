@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.ManageStockCommand;
 import com.hexagonal.application.dto.UpdateProductCommand;
-import com.hexagonal.application.usecase.admin.product.CreateProductUseCaseHandler;
-import com.hexagonal.application.usecase.admin.product.ManageProductStockUseCaseHandler;
-import com.hexagonal.application.usecase.admin.product.RemoveProductUseCaseHandler;
-import com.hexagonal.application.usecase.admin.product.UpdateProductUseCaseHandler;
-import com.hexagonal.entity.Product;
+import com.hexagonal.application.service.admin.product.CreateProductService;
+import com.hexagonal.application.service.admin.product.ManageProductStockService;
+import com.hexagonal.application.service.admin.product.RemoveProductService;
+import com.hexagonal.application.service.admin.product.UpdateProductService;
+import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.adapter.input.web.rest.admin.AdminProductController;
-import com.hexagonal.vo.Money;
+import com.hexagonal.domain.vo.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -41,16 +41,16 @@ class AdminProductControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CreateProductUseCaseHandler createProductUseCaseHandler;
+    private CreateProductService createProductService;
 
     @MockBean
-    private UpdateProductUseCaseHandler updateProductUseCaseHandler;
+    private UpdateProductService updateProductService;
 
     @MockBean
-    private RemoveProductUseCaseHandler removeProductUseCaseHandler;
+    private RemoveProductService removeProductService;
 
     @MockBean
-    private ManageProductStockUseCaseHandler manageProductStockUseCaseHandler;
+    private ManageProductStockService manageProductStockService;
 
     private static final Currency USD = Currency.getInstance("USD");
 
@@ -79,7 +79,7 @@ class AdminProductControllerTest {
             command.getSku()
         );
         
-        when(createProductUseCaseHandler.execute(any(CreateProductCommand.class)))
+        when(createProductService.execute(any(CreateProductCommand.class)))
             .thenReturn(product);
 
         // When & Then
@@ -111,7 +111,7 @@ class AdminProductControllerTest {
             "PROD-001"
         );
         
-        when(updateProductUseCaseHandler.execute(any(UpdateProductCommand.class)))
+        when(updateProductService.execute(any(UpdateProductCommand.class)))
             .thenReturn(product);
 
         // When & Then
@@ -127,13 +127,13 @@ class AdminProductControllerTest {
     void shouldDeleteProductSuccessfully() throws Exception {
         // Given
         String productId = "123e4567-e89b-12d3-a456-426614174000";
-        doNothing().when(removeProductUseCaseHandler).execute(anyString());
+        doNothing().when(removeProductService).execute(anyString());
 
         // When & Then
         mockMvc.perform(delete("/api/admin/products/{productId}", productId))
             .andExpect(status().isNoContent());
         
-        verify(removeProductUseCaseHandler).execute(productId);
+        verify(removeProductService).execute(productId);
     }
 
     @Test
@@ -152,7 +152,7 @@ class AdminProductControllerTest {
             "PROD-001"
         );
         
-        when(manageProductStockUseCaseHandler.execute(any(ManageStockCommand.class)))
+        when(manageProductStockService.execute(any(ManageStockCommand.class)))
             .thenReturn(product);
 
         // When & Then

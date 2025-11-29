@@ -1,6 +1,6 @@
 package com.hexagonal.application.port.in.customer.catalog;
 
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 
 import java.util.List;
 

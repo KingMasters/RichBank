@@ -4,7 +4,7 @@ import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.dto.SupportIssueCommand;
 import com.hexagonal.application.port.in.admin.product.CreateProductUseCase;
 import com.hexagonal.application.port.in.admin.user.HandleSupportIssueUseCase;
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.framework.common.QueueAdapter;
 import org.slf4j.Logger;
@@ -14,7 +14,6 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Component;
 
 /**
  * Kafka Event Listener for Admin Events

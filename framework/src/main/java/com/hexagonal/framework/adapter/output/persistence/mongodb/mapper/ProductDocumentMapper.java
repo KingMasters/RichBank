@@ -1,13 +1,13 @@
 package com.hexagonal.framework.adapter.output.persistence.mongodb.mapper;
 
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.document.ProductDocument;
-import com.hexagonal.vo.Dimensions;
-import com.hexagonal.vo.ID;
-import com.hexagonal.vo.Money;
-import com.hexagonal.vo.ProductStatus;
-import com.hexagonal.vo.Quantity;
-import com.hexagonal.vo.Weight;
+import com.hexagonal.domain.vo.Dimensions;
+import com.hexagonal.domain.vo.ID;
+import com.hexagonal.domain.vo.Money;
+import com.hexagonal.domain.vo.ProductStatus;
+import com.hexagonal.domain.vo.Quantity;
+import com.hexagonal.domain.vo.Weight;
 
 import java.util.Currency;
 import java.util.stream.Collectors;

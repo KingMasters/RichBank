@@ -8,7 +8,7 @@ import com.hexagonal.application.port.in.customer.cart.AddProductToCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.RemoveProductFromCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.UpdateProductQuantityInCartUseCase;
 import com.hexagonal.application.port.in.customer.cart.ViewCartUseCase;
-import com.hexagonal.entity.Cart;
+import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -7,7 +7,7 @@ import com.hexagonal.application.port.in.customer.catalog.FilterProductsByCatego
 import com.hexagonal.application.port.in.customer.catalog.ListAllProductsUseCase;
 import com.hexagonal.application.port.in.customer.catalog.SearchProductsUseCase;
 import com.hexagonal.application.port.in.customer.catalog.SortProductsUseCase;
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

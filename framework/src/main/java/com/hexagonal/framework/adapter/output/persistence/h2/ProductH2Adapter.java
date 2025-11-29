@@ -1,14 +1,13 @@
 package com.hexagonal.framework.adapter.output.persistence.h2;
 
 import com.hexagonal.application.port.out.ProductRepositoryPort;
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
 import com.hexagonal.framework.common.PersistenceAdapter;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;

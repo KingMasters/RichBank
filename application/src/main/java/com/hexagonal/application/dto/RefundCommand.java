@@ -2,7 +2,7 @@ package com.hexagonal.application.dto;
 
 import lombok.Value;
 
-import com.hexagonal.vo.Money;
+import com.hexagonal.domain.vo.Money;
 
 @Value
 public class RefundCommand {

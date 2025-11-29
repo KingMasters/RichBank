@@ -1,8 +1,8 @@
 package com.hexagonal.entity;
 
-import com.hexagonal.vo.Address;
-import com.hexagonal.vo.Email;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.entity.Customer;
+import com.hexagonal.domain.vo.Address;
+import com.hexagonal.domain.vo.Email;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -3,14 +3,14 @@ package com.hexagonal.framework.adapter.input.rest.customer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hexagonal.application.dto.LoginCommand;
 import com.hexagonal.application.dto.RegisterAccountCommand;
-import com.hexagonal.application.usecase.customer.account.LoginUseCaseHandler;
-import com.hexagonal.application.usecase.customer.account.LogoutUseCaseHandler;
-import com.hexagonal.application.usecase.customer.account.RegisterAccountUseCaseHandler;
-import com.hexagonal.application.usecase.customer.account.UpdatePersonalInformationUseCaseHandler;
-import com.hexagonal.application.usecase.customer.account.ViewOrderHistoryUseCaseHandler;
-import com.hexagonal.entity.Customer;
+import com.hexagonal.application.service.customer.account.LoginUseService;
+import com.hexagonal.application.service.customer.account.LogoutService;
+import com.hexagonal.application.service.customer.account.RegisterAccountService;
+import com.hexagonal.application.service.customer.account.UpdatePersonalInformationService;
+import com.hexagonal.application.service.customer.account.ViewOrderHistoryService;
+import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.framework.adapter.input.web.rest.customer.CustomerAccountController;
-import com.hexagonal.vo.Email;
+import com.hexagonal.domain.vo.Email;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -38,19 +38,19 @@ class CustomerAccountControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private RegisterAccountUseCaseHandler registerAccountUseCaseHandler;
+    private RegisterAccountService registerAccountService;
 
     @MockBean
-    private LoginUseCaseHandler loginUseCaseHandler;
+    private LoginUseService loginUseService;
 
     @MockBean
-    private LogoutUseCaseHandler logoutUseCaseHandler;
+    private LogoutService logoutService;
 
     @MockBean
-    private UpdatePersonalInformationUseCaseHandler updatePersonalInformationUseCaseHandler;
+    private UpdatePersonalInformationService updatePersonalInformationService;
 
     @MockBean
-    private ViewOrderHistoryUseCaseHandler viewOrderHistoryUseCaseHandler;
+    private ViewOrderHistoryService viewOrderHistoryService;
 
     @Test
     @DisplayName("POST /api/customer/account/register - Should register customer successfully")
@@ -64,7 +64,7 @@ class CustomerAccountControllerTest {
         );
         Customer customer = Customer.create("John", "Doe", Email.of("john.doe@example.com"));
         
-        when(registerAccountUseCaseHandler.execute(any(RegisterAccountCommand.class)))
+        when(registerAccountService.execute(any(RegisterAccountCommand.class)))
             .thenReturn(customer);
 
         // When & Then
@@ -85,7 +85,7 @@ class CustomerAccountControllerTest {
         LoginCommand command = new LoginCommand("john.doe@example.com", "password123");
         Customer customer = Customer.create("John", "Doe", Email.of("john.doe@example.com"));
         
-        when(loginUseCaseHandler.execute(any(LoginCommand.class))).thenReturn(customer);
+        when(loginUseService.execute(any(LoginCommand.class))).thenReturn(customer);
 
         // When & Then
         mockMvc.perform(post("/api/customer/account/login")

@@ -1,11 +1,11 @@
 package com.hexagonal.framework.adapter.output.persistence.h2.mapper;
 
-import com.hexagonal.entity.Customer;
+import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.entity.AddressEmbeddable;
 import com.hexagonal.framework.adapter.output.persistence.h2.entity.CustomerEntity;
-import com.hexagonal.vo.Address;
-import com.hexagonal.vo.Email;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.vo.Address;
+import com.hexagonal.domain.vo.Email;
+import com.hexagonal.domain.vo.ID;
 
 public class CustomerEntityMapper {
     

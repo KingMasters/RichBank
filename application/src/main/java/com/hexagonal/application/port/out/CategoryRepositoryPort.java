@@ -1,7 +1,7 @@
 package com.hexagonal.application.port.out;
 
-import com.hexagonal.entity.Category;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.entity.Category;
+import com.hexagonal.domain.vo.ID;
 
 import java.util.List;
 import java.util.Optional;

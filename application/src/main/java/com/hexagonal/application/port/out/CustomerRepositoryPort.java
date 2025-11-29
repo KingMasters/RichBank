@@ -1,8 +1,8 @@
 package com.hexagonal.application.port.out;
 
-import com.hexagonal.entity.Customer;
-import com.hexagonal.vo.Email;
-import com.hexagonal.vo.ID;
+import com.hexagonal.domain.entity.Customer;
+import com.hexagonal.domain.vo.Email;
+import com.hexagonal.domain.vo.ID;
 
 import java.util.List;
 import java.util.Optional;

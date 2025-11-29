@@ -1,12 +1,12 @@
 package com.hexagonal.framework.adapter.output.persistence.h2;
 
-import com.hexagonal.entity.Product;
+import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductEntity;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
-import com.hexagonal.vo.ID;
-import com.hexagonal.vo.Money;
-import com.hexagonal.vo.ProductStatus;
+import com.hexagonal.domain.vo.ID;
+import com.hexagonal.domain.vo.Money;
+import com.hexagonal.domain.vo.ProductStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

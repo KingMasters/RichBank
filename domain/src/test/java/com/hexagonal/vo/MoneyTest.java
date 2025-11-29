@@ -1,5 +1,6 @@
 package com.hexagonal.vo;
 
+import com.hexagonal.domain.vo.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
