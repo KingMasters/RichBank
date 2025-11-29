@@ -1,0 +1,5 @@
+cache:
+  category:
+    ttlSeconds: 300
+    maxSize: 1000
+
