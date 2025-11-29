@@ -14,6 +14,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Application Service - Change Password Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Repository'den müşteri alır
+ * - Şifre doğrulamasını yapar
+ * - Şifre geçmişini kontrol eder
+ * - Yeni şifreyi kaydeder
+ */
 @UseCase
 public class PasswordChangeService implements ChangePasswordUseCase {
     private final CustomerRepositoryPort customerRepository;
@@ -23,6 +32,14 @@ public class PasswordChangeService implements ChangePasswordUseCase {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * Şifre değiştirme use case'i
+     * 1. Müşteri bilgisini al
+     * 2. Müşteri durumunu kontrol et
+     * 3. Eski şifreyi doğrula
+     * 4. Yeni şifreyi şifre geçmişi ile kontrol et
+     * 5. Yeni şifreyi kaydet
+     */
     @Override
     public void execute(ChangePasswordCommand command) {
         if (command == null) {
@@ -41,14 +58,14 @@ public class PasswordChangeService implements ChangePasswordUseCase {
         String currentPasswordHash = hash(command.getCurrentPassword());
         List<String> history = customerRepository.getPasswordHistory(id);
 
-        // Verify current password matches the latest password
+        // Mevcut şifreyi doğrula
         if (history == null || history.isEmpty() || !history.get(0).equals(currentPasswordHash)) {
             throw new IllegalArgumentException("Current password is incorrect");
         }
 
         String newPasswordHash = hash(command.getNewPassword());
 
-        // Check against last N passwords
+        // Son N şifre arasında kontrol et
         int checkCount = Math.min(PASSWORD_HISTORY_CHECK, history.size());
         for (int i = 0; i < checkCount; i++) {
             if (history.get(i).equals(newPasswordHash)) {
@@ -56,7 +73,7 @@ public class PasswordChangeService implements ChangePasswordUseCase {
             }
         }
 
-        // All good, update password
+        // Şifreyi güncelle
         customerRepository.updatePassword(id, newPasswordHash);
     }
 

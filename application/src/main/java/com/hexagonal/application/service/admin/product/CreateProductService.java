@@ -6,6 +6,7 @@ import com.hexagonal.application.port.in.admin.product.CreateProductUseCase;
 import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.DuplicateEntityException;
+import com.hexagonal.domain.service.ProductDomainService;
 import com.hexagonal.domain.vo.Dimensions;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Money;
@@ -14,55 +15,70 @@ import com.hexagonal.domain.vo.Weight;
 import java.util.Set;
 
 /**
- * Input Port - Create Product Use Case Implementation
- * Framework katmanından (Controller) application katmanına giriş noktası
+ * Application Service - Create Product Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - SKU benzersizliğini kontrol eder
+ * - Product entity'sini oluşturur
+ * - ProductDomainService'i çağırarak ürün özelliklerini ayarlar
+ * - Repository'ye kaydeder
  */
 @UseCase
 public class CreateProductService implements CreateProductUseCase {
     private final ProductRepositoryPort productRepository;
+    private final ProductDomainService productDomainService;
 
-    public CreateProductService(ProductRepositoryPort productRepository) {
+    public CreateProductService(ProductRepositoryPort productRepository,
+                                ProductDomainService productDomainService) {
         this.productRepository = productRepository;
+        this.productDomainService = productDomainService;
     }
 
+    /**
+     * Ürün oluşturma use case'i
+     * 1. SKU'nun benzersiz olduğunu kontrol et
+     * 2. Ürünü oluştur
+     * 3. Domain service'i kullanarak ürün özelliklerini ayarla
+     * 4. Repository'ye kaydet
+     */
     @Override
     public Product execute(CreateProductCommand command) {
-        // Check if SKU already exists
+        // SKU'nun benzersiz olduğunu kontrol et
         if (productRepository.existsBySku(command.getSku())) {
             throw new DuplicateEntityException("Product", "SKU", command.getSku());
         }
 
-        // Create product
+        // Ürünü oluştur
         Money price = Money.of(command.getPrice(), command.getCurrency());
         Product product = Product.create(command.getName(), price, command.getSku());
 
-        // Set description if provided
+        // Domain service'i çağırarak açıklamayı ayarla
         if (command.getDescription() != null && !command.getDescription().isBlank()) {
-            product.updateDescription(command.getDescription());
+            productDomainService.updateDescription(product, command.getDescription());
         }
 
-        // Add categories if provided
+        // Kategorileri ekle
         if (command.getCategoryIds() != null && !command.getCategoryIds().isEmpty()) {
-            Set<ID> categoryIds = command.getCategoryIds().stream()
+            java.util.Set<ID> categoryIds = command.getCategoryIds().stream()
                     .map(ID::of)
                     .collect(java.util.stream.Collectors.toSet());
-            product.addCategories(categoryIds);
+            productDomainService.assignCategoriesToProduct(product, categoryIds);
         }
 
-        // Add images if provided
+        // Resimleri ekle
         if (command.getImages() != null) {
             command.getImages().forEach(product::addImage);
         }
 
-        // Set weight if provided
+        // Ağırlığını ayarla
         if (command.getWeight() != null && command.getWeightUnit() != null) {
             Weight.WeightUnit weightUnit = Weight.WeightUnit.valueOf(command.getWeightUnit().toUpperCase());
             Weight weight = Weight.of(command.getWeight(), weightUnit);
             product.setWeight(weight);
         }
 
-        // Set dimensions if provided
-        if (command.getLength() != null && command.getWidth() != null && 
+        // Boyutlarını ayarla
+        if (command.getLength() != null && command.getWidth() != null &&
             command.getHeight() != null && command.getDimensionUnit() != null) {
             Dimensions.LengthUnit dimensionUnit = Dimensions.LengthUnit.valueOf(command.getDimensionUnit().toUpperCase());
             Dimensions dimensions = Dimensions.of(command.getLength(), command.getWidth(), command.getHeight(), dimensionUnit);

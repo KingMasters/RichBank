@@ -8,6 +8,13 @@ import com.hexagonal.domain.entity.Product;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Application Service - List All Products Use Case Implementation
+ *
+ * Query Service:
+ * - Repository'den tüm ürünleri alır
+ * - Sadece aktif ürünleri filtreler
+ */
 @UseCase
 public class ListAllProductsService implements ListAllProductsUseCase {
     private final ProductRepositoryPort productRepository;
@@ -16,6 +23,10 @@ public class ListAllProductsService implements ListAllProductsUseCase {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Tüm ürünleri listeleme use case'i
+     * - Aktif olan ürünleri al
+     */
     @Override
     public List<Product> execute() {
         return productRepository.findAll().stream()

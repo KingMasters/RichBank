@@ -6,17 +6,35 @@ import com.hexagonal.application.port.in.customer.account.UpdatePersonalInformat
 import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.exception.EntityNotFoundException;
+import com.hexagonal.domain.service.CustomerDomainService;
 import com.hexagonal.domain.vo.Email;
 import com.hexagonal.domain.vo.ID;
 
+/**
+ * Application Service - Update Personal Information Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Repository'den müşteri alır
+ * - CustomerDomainService'i çağırarak domain logic'i uygular
+ * - Güncellenmiş müşteri bilgilerini repository'ye kaydeder
+ */
 @UseCase
 public class UpdatePersonalInformationService implements UpdatePersonalInformationUseCase {
     private final CustomerRepositoryPort customerRepository;
+    private final CustomerDomainService customerDomainService;
 
-    public UpdatePersonalInformationService(CustomerRepositoryPort customerRepository) {
+    public UpdatePersonalInformationService(CustomerRepositoryPort customerRepository,
+                                            CustomerDomainService customerDomainService) {
         this.customerRepository = customerRepository;
+        this.customerDomainService = customerDomainService;
     }
 
+    /**
+     * Müşteri bilgisi güncelleme use case'i
+     * 1. Müşteri bilgilerini repository'den al
+     * 2. Domain service'i çağırarak bilgileri güncelle
+     * 3. Güncellenmiş müşteri bilgisini kaydet
+     */
     @Override
     public Customer execute(UpdatePersonalInformationCommand command) {
         if (command == null) {
@@ -27,22 +45,22 @@ public class UpdatePersonalInformationService implements UpdatePersonalInformati
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Customer", customerId));
 
-        // Update name if provided
+        // Ad-soyadı güncelle
         if (command.getFirstName() != null || command.getLastName() != null) {
             String firstName = command.getFirstName() != null ? command.getFirstName() : customer.getFirstName();
             String lastName = command.getLastName() != null ? command.getLastName() : customer.getLastName();
-            customer.updatePersonalInfo(firstName, lastName);
+            customerDomainService.updatePersonalInformation(customer, firstName, lastName);
         }
 
-        // Update email if provided
+        // Email güncelle
         if (command.getEmail() != null && !command.getEmail().isBlank()) {
             Email email = Email.of(command.getEmail());
             customer.updateEmail(email);
         }
 
-        // Update phone number if provided
+        // Telefon numarasını güncelle
         if (command.getPhoneNumber() != null) {
-            customer.updatePhoneNumber(command.getPhoneNumber());
+            customerDomainService.updatePhoneNumber(customer, command.getPhoneNumber());
         }
 
         return customerRepository.save(customer);

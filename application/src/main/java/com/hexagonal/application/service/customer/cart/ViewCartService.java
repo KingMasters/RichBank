@@ -7,6 +7,13 @@ import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.vo.ID;
 
+/**
+ * Application Service - View Cart Use Case Implementation
+ *
+ * Query Service:
+ * - Repository'den sepeti alır
+ * - Müşterinin sepetini döndürür
+ */
 @UseCase
 public class ViewCartService implements ViewCartUseCase {
     private final CartRepositoryPort cartRepository;
@@ -15,6 +22,10 @@ public class ViewCartService implements ViewCartUseCase {
         this.cartRepository = cartRepository;
     }
 
+    /**
+     * Sepeti görüntüleme use case'i
+     * - Müşteri kimliğine göre sepeti al
+     */
     @Override
     public Cart execute(ViewCartQuery query) {
         if (query == null) {

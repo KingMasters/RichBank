@@ -8,6 +8,13 @@ import com.hexagonal.domain.vo.ID;
 
 import java.util.List;
 
+/**
+ * Application Service - View Order History Use Case Implementation
+ *
+ * Query Service:
+ * - Repository'den siparişleri alır
+ * - Müşterinin sipariş geçmişini döndürür
+ */
 @UseCase
 public class ViewOrderHistoryService implements ViewOrderHistoryUseCase {
     private final OrderRepositoryPort orderRepository;
@@ -16,6 +23,10 @@ public class ViewOrderHistoryService implements ViewOrderHistoryUseCase {
         this.orderRepository = orderRepository;
     }
 
+    /**
+     * Siparış geçmişini görüntüleme use case'i
+     * - Müşteri kimliğine göre sipariş listesini al
+     */
     @Override
     public List<Order> execute(ViewOrderHistoryQuery query) {
         if (query == null) {

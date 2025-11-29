@@ -6,6 +6,7 @@ import com.hexagonal.application.port.in.admin.product.UpdateProductUseCase;
 import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.EntityNotFoundException;
+import com.hexagonal.domain.service.ProductDomainService;
 import com.hexagonal.domain.vo.Dimensions;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Money;
@@ -14,59 +15,70 @@ import com.hexagonal.domain.vo.Weight;
 import java.util.Set;
 
 /**
- * Input Port - Update Product Use Case Implementation
- * Framework katmanından (Controller) application katmanına giriş noktası
+ * Application Service - Update Product Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Repository'den ürün alır
+ * - ProductDomainService kullanarak ürün özelliklerini günceller
+ * - Güncellenmiş ürünü repository'ye kaydeder
  */
 @UseCase
 public class UpdateProductService implements UpdateProductUseCase {
     private final ProductRepositoryPort productRepository;
+    private final ProductDomainService productDomainService;
 
-    public UpdateProductService(ProductRepositoryPort productRepository) {
+    public UpdateProductService(ProductRepositoryPort productRepository,
+                                ProductDomainService productDomainService) {
         this.productRepository = productRepository;
+        this.productDomainService = productDomainService;
     }
 
+    /**
+     * Ürün güncelleme use case'i
+     * 1. Ürünü repository'den al
+     * 2. Domain service kullanarak ürün özelliklerini güncelle
+     * 3. Güncellenmiş ürünü kaydet
+     */
     @Override
     public Product execute(UpdateProductCommand command) {
         ID productId = ID.of(command.getProductId());
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product", productId));
 
-        // Update name if provided
+        // Ürün adını güncelle
         if (command.getName() != null && !command.getName().isBlank()) {
             product.updateName(command.getName());
         }
 
-        // Update description
+        // Açıklamayı güncelle
         if (command.getDescription() != null) {
-            product.updateDescription(command.getDescription());
+            productDomainService.updateDescription(product, command.getDescription());
         }
 
-        // Update price if provided
+        // Fiyatı güncelle
         if (command.getPrice() != null && command.getCurrency() != null) {
             Money newPrice = Money.of(command.getPrice(), command.getCurrency());
             product.updatePrice(newPrice);
         }
 
-        // Update categories if provided
+        // Kategorileri güncelle
         if (command.getCategoryIds() != null) {
             product.clearCategories();
             if (!command.getCategoryIds().isEmpty()) {
                 Set<ID> categoryIds = command.getCategoryIds().stream()
                         .map(ID::of)
                         .collect(java.util.stream.Collectors.toSet());
-                product.addCategories(categoryIds);
+                productDomainService.assignCategoriesToProduct(product, categoryIds);
             }
         }
 
-        // Update images if provided
+        // Resimleri güncelle
         if (command.getImages() != null) {
-            // Remove all existing images
             product.getImages().forEach(product::removeImage);
-            // Add new images
             command.getImages().forEach(product::addImage);
         }
 
-        // Update weight if provided
+        // Ağırlığı güncelle
         if (command.getWeight() != null && command.getWeightUnit() != null) {
             Weight.WeightUnit weightUnit = Weight.WeightUnit.valueOf(command.getWeightUnit().toUpperCase());
             Weight weight = Weight.of(command.getWeight(), weightUnit);
@@ -75,8 +87,8 @@ public class UpdateProductService implements UpdateProductUseCase {
             product.removeWeight();
         }
 
-        // Update dimensions if provided
-        if (command.getLength() != null && command.getWidth() != null && 
+        // Boyutları güncelle
+        if (command.getLength() != null && command.getWidth() != null &&
             command.getHeight() != null && command.getDimensionUnit() != null) {
             Dimensions.LengthUnit dimensionUnit = Dimensions.LengthUnit.valueOf(command.getDimensionUnit().toUpperCase());
             Dimensions dimensions = Dimensions.of(command.getLength(), command.getWidth(), command.getHeight(), dimensionUnit);

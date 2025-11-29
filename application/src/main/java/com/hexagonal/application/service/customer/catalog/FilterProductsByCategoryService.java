@@ -10,6 +10,13 @@ import com.hexagonal.domain.vo.ID;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Application Service - Filter Products By Category Use Case Implementation
+ *
+ * Query Service:
+ * - Repository'den tüm ürünleri alır
+ * - Kategori ve durum bazında filtreler
+ */
 @UseCase
 public class FilterProductsByCategoryService implements FilterProductsByCategoryUseCase {
     private final ProductRepositoryPort productRepository;
@@ -18,6 +25,10 @@ public class FilterProductsByCategoryService implements FilterProductsByCategory
         this.productRepository = productRepository;
     }
 
+    /**
+     * Ürünleri kategoriye göre filtreleme use case'i
+     * - Aktif ürünleri kategori bazında filtrele
+     */
     @Override
     public List<Product> execute(FilterProductsByCategoryCommand command) {
         if (command == null) {

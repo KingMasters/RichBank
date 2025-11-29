@@ -8,19 +8,40 @@ import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.exception.EntityNotFoundException;
+import com.hexagonal.domain.service.CustomerDomainService;
 import com.hexagonal.domain.vo.Address;
 import com.hexagonal.domain.vo.ID;
 
+/**
+ * Application Service - Enter Shipping Information Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Müşteri ve sepet bilgisini alır
+ * - CustomerDomainService kullanarak adresi günceller
+ * - Müşteri bilgisini kaydeder
+ */
 @UseCase
 public class EnterShippingInformationService implements EnterShippingInformationUseCase {
     private final CartRepositoryPort cartRepository;
     private final CustomerRepositoryPort customerRepository;
+    private final CustomerDomainService customerDomainService;
 
-    public EnterShippingInformationService(CartRepositoryPort cartRepository, CustomerRepositoryPort customerRepository) {
+    public EnterShippingInformationService(CartRepositoryPort cartRepository,
+                                           CustomerRepositoryPort customerRepository,
+                                           CustomerDomainService customerDomainService) {
         this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
+        this.customerDomainService = customerDomainService;
     }
 
+    /**
+     * Gönderim bilgisi girme use case'i
+     * 1. Müşteri mevcudiyetini kontrol et
+     * 2. Sepeti al
+     * 3. Gönderim adresi oluştur
+     * 4. Domain service kullanarak adres güncelle
+     * 5. Müşteri bilgisini kaydet
+     */
     @Override
     public Cart execute(EnterShippingInformationCommand command) {
         if (command == null) {
@@ -29,15 +50,15 @@ public class EnterShippingInformationService implements EnterShippingInformation
 
         ID customerId = ID.of(command.getCustomerId());
         
-        // Verify customer exists
+        // Müşteri mevcudiyetini kontrol et
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Customer", customerId));
 
-        // Find cart
+        // Sepeti al
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + command.getCustomerId() + " not found"));
 
-        // Create shipping address
+        // Gönderim adresi oluştur
         Address shippingAddress = Address.of(
                 command.getStreet(),
                 command.getCity(),
@@ -46,13 +67,10 @@ public class EnterShippingInformationService implements EnterShippingInformation
                 command.getCountry()
         );
 
-        // Update customer address (this could be stored separately for shipping)
-        customer.updateAddress(shippingAddress);
+        // Domain service kullanarak adres güncelle
+        customerDomainService.updateAddress(customer, shippingAddress);
         customerRepository.save(customer);
 
-        // Note: In a real implementation, shipping information might be stored
-        // separately or in a session/checkout context rather than directly in the cart
-        // For this hexagon structure, we're updating the customer's address
 
         return cart;
     }

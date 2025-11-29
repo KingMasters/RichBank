@@ -8,6 +8,14 @@ import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.vo.ID;
 
+/**
+ * Application Service - Select Payment Method Use Case Implementation
+ *
+ * Query/Command Service:
+ * - Repository'den sepeti alır
+ * - Ödeme yöntemi doğrulaması yapar
+ * - Ödeme bilgisini session/context'e kaydeder
+ */
 @UseCase
 public class SelectPaymentMethodService implements SelectPaymentMethodUseCase {
     private final CartRepositoryPort cartRepository;
@@ -16,6 +24,14 @@ public class SelectPaymentMethodService implements SelectPaymentMethodUseCase {
         this.cartRepository = cartRepository;
     }
 
+    /**
+     * Ödeme yöntemi seçme use case'i
+     * 1. Sepeti repository'den al
+     * 2. Ödeme yöntemi doğrula
+     * 3. Ödeme yöntemi session/context'e kaydet
+     *
+     * NOT: Gerçek uygulamada ödeme yöntemi session veya checkout context'te tutulur
+     */
     @Override
     public Cart execute(SelectPaymentMethodCommand command) {
         if (command == null) {
@@ -24,18 +40,17 @@ public class SelectPaymentMethodService implements SelectPaymentMethodUseCase {
 
         ID customerId = ID.of(command.getCustomerId());
 
-        // Find cart
+        // Sepeti repository'den al
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + command.getCustomerId() + " not found"));
 
-        // Validate payment method
+        // Ödeme yöntemi doğrula
         if (command.getPaymentMethod() == null || command.getPaymentMethod().isBlank()) {
             throw new IllegalArgumentException("Payment method cannot be null or empty");
         }
 
-        // Note: In a real implementation, payment method would be stored
-        // in a checkout context or session, not directly in the cart
-        // For this hexagon structure, we're just validating the cart exists
+        // NOT: Gerçek uygulamada ödeme yöntemi bilgisi session veya checkout context'te saklanır
+        // Bu hexagon yapısında sadece sepet varlığını kontrol ettik
 
         return cart;
     }

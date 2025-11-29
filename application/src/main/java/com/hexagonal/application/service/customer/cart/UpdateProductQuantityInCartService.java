@@ -8,20 +8,39 @@ import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.EntityNotFoundException;
-import com.hexagonal.domain.exception.InsufficientStockException;
+import com.hexagonal.domain.service.CartDomainService;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Quantity;
 
+/**
+ * Application Service - Update Product Quantity In Cart Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Repository'den sepeti ve ürünü alır
+ * - CartDomainService'i çağırarak domain logic'i uygular
+ * - Güncellenmiş sepeti repository'ye kaydeder
+ */
 @UseCase
 public class UpdateProductQuantityInCartService implements UpdateProductQuantityInCartUseCase {
     private final CartRepositoryPort cartRepository;
     private final ProductRepositoryPort productRepository;
+    private final CartDomainService cartDomainService;
 
-    public UpdateProductQuantityInCartService(CartRepositoryPort cartRepository, ProductRepositoryPort productRepository) {
+    public UpdateProductQuantityInCartService(CartRepositoryPort cartRepository,
+                                               ProductRepositoryPort productRepository,
+                                               CartDomainService cartDomainService) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
+        this.cartDomainService = cartDomainService;
     }
 
+    /**
+     * Sepetteki ürün miktarını güncelleme use case'i
+     * 1. Sepeti repository'den al
+     * 2. Ürünü repository'den al
+     * 3. Domain service'i çağırarak miktarı güncelle
+     * 4. Güncellenmiş sepeti kaydet
+     */
     @Override
     public Cart execute(UpdateProductQuantityInCartCommand command) {
         if (command == null) {
@@ -31,26 +50,17 @@ public class UpdateProductQuantityInCartService implements UpdateProductQuantity
         ID customerId = ID.of(command.getCustomerId());
         ID productId = ID.of(command.getProductId());
 
-        // Find cart
+        // Sepeti repository'den al
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + command.getCustomerId() + " not found"));
 
-        // Verify product exists and is active
+        // Ürünü repository'den al
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product", productId));
 
-        if (!product.isActive()) {
-            throw new IllegalStateException("Product is not active");
-        }
-
-        // Check stock availability
-        Quantity requestedQuantity = Quantity.of(command.getQuantity());
-        if (!product.hasStock(requestedQuantity)) {
-            throw new InsufficientStockException(productId, requestedQuantity, product.getStockQuantity());
-        }
-
-        // Update item quantity in cart
-        cart.updateItemQuantity(productId, requestedQuantity);
+        // Domain service'i çağırarak miktarı güncelle
+        Quantity newQuantity = Quantity.of(command.getQuantity());
+        cartDomainService.updateProductQuantityInCart(cart, product, newQuantity);
 
         return cartRepository.save(cart);
     }

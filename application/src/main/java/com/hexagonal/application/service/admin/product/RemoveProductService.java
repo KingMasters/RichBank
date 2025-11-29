@@ -8,8 +8,12 @@ import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.vo.ID;
 
 /**
- * Input Port - Remove Product Use Case Implementation
- * Framework katmanından (Controller) application katmanına giriş noktası
+ * Application Service - Remove Product Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - Ürünü repository'den alır
+ * - Soft delete yaparak ürünü silinmiş olarak işaretler
+ * - Hard delete için ayrı bir metod sunar
  */
 @UseCase
 public class RemoveProductService implements RemoveProductUseCase {
@@ -19,30 +23,40 @@ public class RemoveProductService implements RemoveProductUseCase {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Ürün silme use case'i (Soft Delete)
+     * - Ürünü silinmiş olarak işaretler
+     * - Sipariş geçmişi korunur
+     * - Veri bütünlüğü sağlanır
+     */
     @Override
     public void execute(String productId) {
         ID id = ID.of(productId);
         
-        // Check if product exists
+        // Ürün mevcudiyetini kontrol et
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product", id));
 
-        // Mark as discontinued instead of hard delete (soft delete)
-        // This preserves order history and maintains data integrity
+        // Soft delete: silinmiş olarak işaretle
         product.markAsDiscontinued();
         productRepository.save(product);
     }
 
+    /**
+     * Ürün tamamen silme (Hard Delete)
+     * - Veritabanından tamamen sil
+     * - DİKKAT: Sipariş geçmişi için sorun yaratabilir
+     */
     @Override
     public void executeHardDelete(String productId) {
         ID id = ID.of(productId);
         
-        // Check if product exists
+        // Ürün mevcudiyetini kontrol et
         if (!productRepository.existsById(id)) {
             throw new EntityNotFoundException("Product", id);
         }
 
-        // Hard delete - use with caution
+        // Hard delete - dikkatli kullan!
         productRepository.deleteById(id);
     }
 }

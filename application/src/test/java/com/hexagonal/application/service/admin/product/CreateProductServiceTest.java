@@ -4,6 +4,7 @@ import com.hexagonal.application.dto.CreateProductCommand;
 import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.DuplicateEntityException;
+import com.hexagonal.domain.service.ProductDomainService;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Money;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,9 @@ class CreateProductServiceTest {
 
     @Mock
     private ProductRepositoryPort productRepository;
+
+    @Mock
+    private ProductDomainService productDomainService;
 
     @InjectMocks
     private CreateProductService createProductService;

@@ -14,30 +14,55 @@ import com.hexagonal.domain.entity.OrderItem;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.exception.InsufficientStockException;
+import com.hexagonal.domain.service.ProductDomainService;
 import com.hexagonal.domain.vo.Address;
 import com.hexagonal.domain.vo.ID;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Application Service - Complete Purchase Use Case Implementation
+ *
+ * Karmaşık Orkestrasyon Servisi:
+ * - Müşteri ve sepet bilgisini alır
+ * - Stok kontrolü yapar
+ * - ProductDomainService'i çağırarak stok azaltır
+ * - Order entity'sini oluşturur
+ * - Sepeti sipariş haline dönüştürür
+ * - Tüm değişiklikleri kaydeder
+ */
 @UseCase
 public class CompletePurchaseService implements CompletePurchaseUseCase {
     private final CartRepositoryPort cartRepository;
     private final CustomerRepositoryPort customerRepository;
     private final OrderRepositoryPort orderRepository;
     private final ProductRepositoryPort productRepository;
+    private final ProductDomainService productDomainService;
 
     public CompletePurchaseService(
             CartRepositoryPort cartRepository,
             CustomerRepositoryPort customerRepository,
             OrderRepositoryPort orderRepository,
-            ProductRepositoryPort productRepository) {
+            ProductRepositoryPort productRepository,
+            ProductDomainService productDomainService) {
         this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.productDomainService = productDomainService;
     }
 
+    /**
+     * Satın alım tamamlama use case'i
+     * 1. Müşteri ve sepeti al
+     * 2. Sepet boş olmadığını kontrol et
+     * 3. Sepet ürünlerini sipariş ürünlerine dönüştür ve stok kontrol et
+     * 4. ProductDomainService kullanarak stok azalt
+     * 5. Order entity'sini oluştur
+     * 6. Sepeti sipariş haline dönüştür
+     * 7. Tüm değişiklikleri kaydet
+     */
     @Override
     public Order execute(CompletePurchaseCommand command) {
         if (command == null) {
@@ -46,11 +71,11 @@ public class CompletePurchaseService implements CompletePurchaseUseCase {
 
         ID customerId = ID.of(command.getCustomerId());
 
-        // Find customer
+        // Müşteri bilgisini al
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Customer", customerId));
 
-        // Find cart
+        // Sepeti al
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart for customer " + command.getCustomerId() + " not found"));
 
@@ -58,13 +83,13 @@ public class CompletePurchaseService implements CompletePurchaseUseCase {
             throw new IllegalStateException("Cannot complete purchase with empty cart");
         }
 
-        // Convert cart items to order items and validate stock
+        // Sepet ürünlerini sipariş ürünlerine dönüştür ve stok kontrol et
         List<OrderItem> orderItems = new ArrayList<>();
         for (var cartItem : cart.getItems()) {
             Product product = productRepository.findById(cartItem.getProductId())
                     .orElseThrow(() -> new EntityNotFoundException("Product", cartItem.getProductId()));
 
-            // Verify stock availability
+            // Stok doğrulaması
             if (!product.hasStock(cartItem.getQuantity())) {
                 throw new InsufficientStockException(
                         cartItem.getProductId(),
@@ -73,7 +98,7 @@ public class CompletePurchaseService implements CompletePurchaseUseCase {
                 );
             }
 
-            // Create order item
+            // Sipariş ürünü oluştur
             OrderItem orderItem = OrderItem.create(
                     cartItem.getProductId(),
                     product.getName(),
@@ -82,30 +107,24 @@ public class CompletePurchaseService implements CompletePurchaseUseCase {
             );
             orderItems.add(orderItem);
 
-            // Reserve stock (remove from inventory)
-            product.removeStock(cartItem.getQuantity());
+            // Domain service kullanarak stok azalt
+            productDomainService.removeStock(product, cartItem.getQuantity());
             productRepository.save(product);
         }
 
-        // Get shipping address (use customer's address or from command)
+        // Gönderim adresini al
         Address shippingAddress = customer.getAddress();
         if (shippingAddress == null) {
             throw new IllegalStateException("Shipping address is required to complete purchase");
         }
 
-        // Get billing address (use shipping address if not provided separately)
-        Address billingAddress = shippingAddress;
+        // Order entity'sini oluştur (gönderim adresi fatura adresi olarak da kullanılır)
+        Order order = Order.create(customerId, orderItems, shippingAddress, shippingAddress);
 
-        // Create order
-        Order order = Order.create(customerId, orderItems, shippingAddress, billingAddress);
-
-        // Apply discount if provided (this would typically be handled by a discount service)
-        // For now, we'll just create the order with the cart total
-
-        // Save order
+        // Order'ı kaydet
         Order savedOrder = orderRepository.save(order);
 
-        // Convert cart to order (mark cart as converted)
+        // Sepeti sipariş haline dönüştür
         cart.convertToOrder();
         cartRepository.save(cart);
 

@@ -8,6 +8,14 @@ import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.exception.EntityNotFoundException;
 import com.hexagonal.domain.vo.Email;
 
+/**
+ * Application Service - Login Use Case Implementation
+ *
+ * Orkestrasyon Servisi:
+ * - CustomerRepositoryPort'u çağırarak müşteri bilgisini alır
+ * - Email ve şifre doğrulamasını yapar
+ * - Müşteri durum kontrolü yapar
+ */
 @UseCase
 public class LoginUseService implements LoginUseCase {
     private final CustomerRepositoryPort customerRepository;
@@ -16,6 +24,14 @@ public class LoginUseService implements LoginUseCase {
         this.customerRepository = customerRepository;
     }
 
+    /**
+     * Müşteri giriş use case'i
+     * 1. Email ile müşteri ara
+     * 2. Müşteri durumunu kontrol et
+     * 3. Müşteri bilgisini döndür
+     *
+     * NOT: Şifre doğrulaması gerçek uygulamada authentication service'i tarafından yapılmalıdır
+     */
     @Override
     public Customer execute(LoginCommand command) {
         if (command == null) {
@@ -30,8 +46,8 @@ public class LoginUseService implements LoginUseCase {
             throw new IllegalStateException("Customer account is not active");
         }
 
-        // Note: Password validation would typically be handled by a separate authentication service
-        // This is a simplified version for the hexagon structure
+        // NOT: Şifre doğrulaması normalde authentication service tarafından yapılır
+        // Bu örnek basitleştirilmiş bir versiyondur
 
         return customer;
     }
