@@ -1,13 +1,14 @@
-package com.hexagonal.framework.logging;
+package com.hexagonal.framework.crosscutting.logging;
 
 import com.hexagonal.application.port.out.LoggingPort;
+import com.hexagonal.framework.common.LoggingAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-@Component
+@LoggingAdapter
 public class ApplicationServiceLogger implements LoggingPort {
     private static final Logger logger = LoggerFactory.getLogger("APPLICATION_SERVICE");
 

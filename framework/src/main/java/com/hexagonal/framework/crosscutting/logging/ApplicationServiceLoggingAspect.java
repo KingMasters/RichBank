@@ -1,4 +1,4 @@
-package com.hexagonal.framework.logging;
+package com.hexagonal.framework.crosscutting.logging;
 
 import com.hexagonal.application.port.out.LoggingPort;
 import org.aspectj.lang.ProceedingJoinPoint;

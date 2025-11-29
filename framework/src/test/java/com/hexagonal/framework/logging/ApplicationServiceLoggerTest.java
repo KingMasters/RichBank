@@ -1,15 +1,12 @@
 package com.hexagonal.framework.logging;
 
 import com.hexagonal.application.port.out.LoggingPort;
+import com.hexagonal.framework.crosscutting.logging.ApplicationServiceLogger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 @DisplayName("ApplicationServiceLogger Tests")
 public class ApplicationServiceLoggerTest {
