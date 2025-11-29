@@ -1,0 +1,73 @@
+### Metrics Endpoints - Test Collection
+
+# Health Check
+GET http://localhost:8080/actuator/health
+
+### All Available Metrics
+GET http://localhost:8080/actuator/metrics
+
+### Prometheus Format Metrics (for scraping)
+GET http://localhost:8080/actuator/prometheus
+
+### Specific Metric Details
+GET http://localhost:8080/actuator/metrics/application.service.execution.time
+
+### Application Info
+GET http://localhost:8080/actuator/info
+
+### Metrics Configuration
+GET http://localhost:8080/actuator/env
+
+### Login Service (generates metrics)
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "password": "password123"
+}
+
+### Create Product (generates metrics)
+POST http://localhost:8080/api/v1/admin/products
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "name": "Sample Product",
+  "description": "A sample product",
+  "price": 99.99,
+  "stock": 100
+}
+
+### Get Category Cache (generates cache metrics)
+GET http://localhost:8080/api/v1/categories
+Content-Type: application/json
+
+### Prometheus Query Examples
+# Success Rate
+GET http://localhost:9090/api/v1/query?query=rate(application_service_success_count_total[5m]) / rate(application_service_invocation_count_total[5m])
+
+# Average Execution Time
+GET http://localhost:9090/api/v1/query?query=rate(application_service_execution_time_seconds_sum[5m]) / rate(application_service_execution_time_seconds_count[5m])
+
+# Error Count
+GET http://localhost:9090/api/v1/query?query=rate(application_service_failure_count_total[5m])
+
+# 95th Percentile Response Time
+GET http://localhost:9090/api/v1/query?query=histogram_quantile(0.95, rate(application_service_execution_time_seconds_bucket[5m]))
+
+### Grafana Dashboards
+# Grafana Web UI
+GET http://localhost:3000
+
+# Default Credentials
+# Username: admin
+# Password: admin
+
+### Prometheus Web UI
+# Prometheus Console
+GET http://localhost:9090
+
+### AlertManager Web UI
+GET http://localhost:9093
+

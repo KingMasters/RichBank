@@ -1,0 +1,146 @@
+groups:
+  - name: richbank_application
+    interval: 30s
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(application_service_failure_count_total[5m]) /
+            rate(application_service_invocation_count_total[5m])
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: 'critical'
+          component: 'application'
+          team: 'backend'
+        annotations:
+          summary: 'High error rate detected'
+          description: 'Error rate for {{ $labels.service }}.{{ $labels.method }} is {{ $value | humanizePercentage }}'
+          runbook_url: 'https://wiki.example.com/runbook/high_error_rate'
+
+      # Slow service execution
+      - alert: SlowServiceExecution
+        expr: |
+          histogram_quantile(0.95, rate(application_service_execution_time_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: 'warning'
+          component: 'application'
+          team: 'backend'
+        annotations:
+          summary: 'Slow service execution detected'
+          description: '{{ $labels.service }}.{{ $labels.method }} 95th percentile execution time is {{ $value }}s'
+          runbook_url: 'https://wiki.example.com/runbook/slow_execution'
+
+      # No invocations (service down)
+      - alert: ServiceNotInvoking
+        expr: |
+          rate(application_service_invocation_count_total[5m]) == 0
+        for: 10m
+        labels:
+          severity: 'critical'
+          component: 'application'
+          team: 'backend'
+        annotations:
+          summary: 'Service not receiving invocations'
+          description: '{{ $labels.service }} has not received any invocations for 10 minutes'
+          runbook_url: 'https://wiki.example.com/runbook/service_down'
+
+      # High cache miss rate
+      - alert: HighCacheMissRate
+        expr: |
+          (
+            rate(application_business_cache_category_cache_miss_total[5m]) /
+            (rate(application_business_cache_category_cache_hit_total[5m]) + 
+             rate(application_business_cache_category_cache_miss_total[5m]))
+          ) > 0.3
+        for: 5m
+        labels:
+          severity: 'warning'
+          component: 'cache'
+          team: 'backend'
+        annotations:
+          summary: 'High cache miss rate'
+          description: 'Cache miss rate for {{ $labels.cache_type }} is {{ $value | humanizePercentage }}'
+          runbook_url: 'https://wiki.example.com/runbook/cache_miss_rate'
+
+      # Database operation timeout
+      - alert: DatabaseOperationTimeout
+        expr: |
+          histogram_quantile(0.99, rate(application_business_database_query_bucket[5m])) > 5
+        for: 2m
+        labels:
+          severity: 'critical'
+          component: 'database'
+          team: 'backend'
+        annotations:
+          summary: 'Database operation timeout detected'
+          description: '{{ $labels.operation }} on {{ $labels.entity }} taking > 5 seconds'
+          runbook_url: 'https://wiki.example.com/runbook/db_timeout'
+
+      # High failure count
+      - alert: HighFailureCount
+        expr: |
+          rate(application_service_failure_count_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: 'critical'
+          component: 'application'
+          team: 'backend'
+        annotations:
+          summary: 'High failure count'
+          description: '{{ $labels.service }}.{{ $labels.method }} has {{ $value | humanize }} failures/sec'
+          runbook_url: 'https://wiki.example.com/runbook/high_failures'
+
+  - name: richbank_infrastructure
+    interval: 30s
+    rules:
+      # Prometheus high scrape duration
+      - alert: PrometheusHighScrapeDuration
+        expr: histogram_quantile(0.99, rate(prometheus_sd_scrape_duration_seconds_bucket[5m])) > 10
+        for: 5m
+        labels:
+          severity: 'warning'
+          component: 'prometheus'
+          team: 'platform'
+        annotations:
+          summary: 'Prometheus high scrape duration'
+          description: 'Prometheus scraping taking {{ $value | humanizeDuration }}'
+
+      # Prometheus down
+      - alert: PrometheusDown
+        expr: up{job="prometheus"} == 0
+        for: 5m
+        labels:
+          severity: 'critical'
+          component: 'prometheus'
+          team: 'platform'
+        annotations:
+          summary: 'Prometheus instance is down'
+          description: 'Prometheus at {{ $labels.instance }} is down'
+
+      # Alertmanager down
+      - alert: AlertmanagerDown
+        expr: up{job="alertmanager"} == 0
+        for: 5m
+        labels:
+          severity: 'critical'
+          component: 'alertmanager'
+          team: 'platform'
+        annotations:
+          summary: 'Alertmanager instance is down'
+          description: 'Alertmanager at {{ $labels.instance }} is down'
+
+      # Grafana down
+      - alert: GrafanaDown
+        expr: up{job="grafana"} == 0
+        for: 5m
+        labels:
+          severity: 'warning'
+          component: 'grafana'
+          team: 'platform'
+        annotations:
+          summary: 'Grafana instance is down'
+          description: 'Grafana at {{ $labels.instance }} is down'
+

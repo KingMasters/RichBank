@@ -7,6 +7,35 @@ cache:
 logging:
   level:
     APPLICATION_SERVICE: INFO
+    METRICS: DEBUG
+    METRICS_ASPECT: DEBUG
     com.hexagonal: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Actuator and Metrics Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        application.service.execution.time: true
+      slo:
+        application.service.execution.time: 50ms,100ms,200ms,500ms,1s,2s,5s
+    tags:
+      application: richbank
+      version: 0.0.1-SNAPSHOT
+
