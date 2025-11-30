@@ -2,7 +2,7 @@ package com.hexagonal.framework.adapter.output.persistence.h2;
 
 import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.domain.entity.Customer;
-import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerEntityMapper;
+import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerJpaMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.CustomerJpaRepository;
 import com.hexagonal.framework.adapter.output.persistence.PersistenceAdapter;
 import com.hexagonal.domain.vo.Email;
@@ -28,30 +28,30 @@ public class CustomerH2Adapter implements CustomerRepositoryPort {
     @Override
     @CacheEvict(value = "customers", allEntries = true)
     public Customer save(Customer customer) {
-        var entity = CustomerEntityMapper.toEntity(customer);
+        var entity = CustomerJpaMapper.toEntity(customer);
         var savedEntity = jpaRepository.save(entity);
-        return CustomerEntityMapper.toDomain(savedEntity);
+        return CustomerJpaMapper.toDomain(savedEntity);
     }
     
     @Override
     @Cacheable(value = "customers", key = "#id.value.toString()")
     public Optional<Customer> findById(ID id) {
         return jpaRepository.findById(id.getValue())
-            .map(CustomerEntityMapper::toDomain);
+            .map(CustomerJpaMapper::toDomain);
     }
     
     @Override
     @Cacheable(value = "customers", key = "'email:' + #email.getValue()")
     public Optional<Customer> findByEmail(Email email) {
         return jpaRepository.findByEmail(email.getValue())
-            .map(CustomerEntityMapper::toDomain);
+            .map(CustomerJpaMapper::toDomain);
     }
     
     @Override
     @Cacheable(value = "customers", key = "'all'")
     public List<Customer> findAll() {
         return jpaRepository.findAll().stream()
-            .map(CustomerEntityMapper::toDomain)
+            .map(CustomerJpaMapper::toDomain)
             .collect(Collectors.toList());
     }
     

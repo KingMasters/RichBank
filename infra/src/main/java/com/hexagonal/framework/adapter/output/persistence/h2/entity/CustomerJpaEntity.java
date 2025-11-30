@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEntity {
+public class CustomerJpaEntity {
     @Id
     @Column(columnDefinition = "UUID")
     private UUID id;

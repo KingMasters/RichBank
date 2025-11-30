@@ -1,7 +1,7 @@
 package com.hexagonal.framework.adapter.output.persistence.h2.mapper;
 
 import com.hexagonal.domain.entity.Product;
-import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductEntity;
+import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductJpaEntity;
 import com.hexagonal.domain.vo.Dimensions;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Money;
@@ -12,10 +12,10 @@ import com.hexagonal.domain.vo.Weight;
 import java.util.Currency;
 import java.util.stream.Collectors;
 
-public class ProductEntityMapper {
+public class ProductJpaMapper {
     
-    public static ProductEntity toEntity(Product product) {
-        ProductEntity.ProductEntityBuilder builder = ProductEntity.builder()
+    public static ProductJpaEntity toEntity(Product product) {
+        ProductJpaEntity.ProductJpaEntityBuilder builder = ProductJpaEntity.builder()
             .id(product.getId().getValue())
             .name(product.getName())
             .description(product.getDescription())
@@ -46,7 +46,7 @@ public class ProductEntityMapper {
         return builder.build();
     }
     
-    public static Product toDomain(ProductEntity entity) {
+    public static Product toDomain(ProductJpaEntity entity) {
         Money price = Money.of(entity.getPriceAmount(), Currency.getInstance(entity.getPriceCurrency()));
         Product product = Product.of(
             ID.of(entity.getId()),

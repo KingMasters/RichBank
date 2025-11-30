@@ -2,7 +2,7 @@ package com.hexagonal.framework.adapter.output.persistence.h2;
 
 import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Product;
-import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
+import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductJpaMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
 import com.hexagonal.framework.adapter.output.persistence.PersistenceAdapter;
 import com.hexagonal.domain.vo.ID;
@@ -25,30 +25,30 @@ public class ProductH2Adapter implements ProductRepositoryPort {
     @Override
     @CacheEvict(value = "products", allEntries = true)
     public Product save(Product product) {
-        var entity = ProductEntityMapper.toEntity(product);
+        var entity = ProductJpaMapper.toEntity(product);
         var savedEntity = jpaRepository.save(entity);
-        return ProductEntityMapper.toDomain(savedEntity);
+        return ProductJpaMapper.toDomain(savedEntity);
     }
     
     @Override
     @Cacheable(value = "products", key = "#id.value.toString()")
     public Optional<Product> findById(ID id) {
         return jpaRepository.findById(id.getValue())
-            .map(ProductEntityMapper::toDomain);
+            .map(ProductJpaMapper::toDomain);
     }
     
     @Override
     @Cacheable(value = "products", key = "'sku:' + #sku")
     public Optional<Product> findBySku(String sku) {
         return jpaRepository.findBySku(sku)
-            .map(ProductEntityMapper::toDomain);
+            .map(ProductJpaMapper::toDomain);
     }
     
     @Override
     @Cacheable(value = "products", key = "'all'")
     public List<Product> findAll() {
         return jpaRepository.findAll().stream()
-            .map(ProductEntityMapper::toDomain)
+            .map(ProductJpaMapper::toDomain)
             .collect(Collectors.toList());
     }
     

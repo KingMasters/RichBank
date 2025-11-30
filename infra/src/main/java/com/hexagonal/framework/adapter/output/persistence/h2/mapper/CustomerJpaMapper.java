@@ -2,15 +2,15 @@ package com.hexagonal.framework.adapter.output.persistence.h2.mapper;
 
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.entity.AddressEmbeddable;
-import com.hexagonal.framework.adapter.output.persistence.h2.entity.CustomerEntity;
+import com.hexagonal.framework.adapter.output.persistence.h2.entity.CustomerJpaEntity;
 import com.hexagonal.domain.vo.Address;
 import com.hexagonal.domain.vo.Email;
 import com.hexagonal.domain.vo.ID;
 
-public class CustomerEntityMapper {
+public class CustomerJpaMapper {
     
-    public static CustomerEntity toEntity(Customer customer) {
-        CustomerEntity.CustomerEntityBuilder builder = CustomerEntity.builder()
+    public static CustomerJpaEntity toEntity(Customer customer) {
+        CustomerJpaEntity.CustomerJpaEntityBuilder builder = CustomerJpaEntity.builder()
             .id(customer.getId().getValue())
             .firstName(customer.getFirstName())
             .lastName(customer.getLastName())
@@ -34,7 +34,7 @@ public class CustomerEntityMapper {
         return builder.build();
     }
     
-    public static Customer toDomain(CustomerEntity entity) {
+    public static Customer toDomain(CustomerJpaEntity entity) {
         Customer customer = Customer.of(
             ID.of(entity.getId()),
             entity.getFirstName(),

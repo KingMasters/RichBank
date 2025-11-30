@@ -2,7 +2,7 @@ package com.hexagonal.framework.adapter.output.persistence.h2.mapper;
 
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.domain.vo.*;
-import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductEntity;
+import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.util.Currency;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("ProductEntityMapper Tests")
-class ProductEntityMapperTest {
+class ProductJpaEntityMapperTest {
 
     private static final Currency USD = Currency.getInstance("USD");
 
@@ -32,7 +32,7 @@ class ProductEntityMapperTest {
         product.addImage("https://example.com/image.jpg");
 
         // When
-        ProductEntity entity = ProductEntityMapper.toEntity(product);
+        ProductJpaEntity entity = ProductJpaMapper.toEntity(product);
 
         // Then
         assertThat(entity).isNotNull();
@@ -52,7 +52,7 @@ class ProductEntityMapperTest {
     @DisplayName("Should map entity to product")
     void shouldMapEntityToProduct() {
         // Given
-        ProductEntity entity = ProductEntity.builder()
+        ProductJpaEntity entity = ProductJpaEntity.builder()
             .id(ID.generate().getValue())
             .name("Test Product")
             .description("Test Description")
@@ -64,7 +64,7 @@ class ProductEntityMapperTest {
             .build();
 
         // When
-        Product product = ProductEntityMapper.toDomain(entity);
+        Product product = ProductJpaMapper.toDomain(entity);
 
         // Then
         assertThat(product).isNotNull();
@@ -91,8 +91,8 @@ class ProductEntityMapperTest {
         product.setWeight(weight);
 
         // When
-        ProductEntity entity = ProductEntityMapper.toEntity(product);
-        Product mappedProduct = ProductEntityMapper.toDomain(entity);
+        ProductJpaEntity entity = ProductJpaMapper.toEntity(product);
+        Product mappedProduct = ProductJpaMapper.toDomain(entity);
 
         // Then
         assertThat(mappedProduct.getWeight()).isNotNull();
@@ -118,8 +118,8 @@ class ProductEntityMapperTest {
         product.setDimensions(dimensions);
 
         // When
-        ProductEntity entity = ProductEntityMapper.toEntity(product);
-        Product mappedProduct = ProductEntityMapper.toDomain(entity);
+        ProductJpaEntity entity = ProductJpaMapper.toEntity(product);
+        Product mappedProduct = ProductJpaMapper.toDomain(entity);
 
         // Then
         assertThat(mappedProduct.getDimensions()).isNotNull();

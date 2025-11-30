@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductEntity {
+public class ProductJpaEntity {
     @Id
     @Column(columnDefinition = "UUID")
     private UUID id;

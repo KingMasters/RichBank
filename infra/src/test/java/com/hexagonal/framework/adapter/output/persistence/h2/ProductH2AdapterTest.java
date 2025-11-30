@@ -1,8 +1,8 @@
 package com.hexagonal.framework.adapter.output.persistence.h2;
 
 import com.hexagonal.domain.entity.Product;
-import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductEntity;
-import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
+import com.hexagonal.framework.adapter.output.persistence.h2.entity.ProductJpaEntity;
+import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductJpaMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.Money;
@@ -35,7 +35,7 @@ class ProductH2AdapterTest {
     private ProductH2Adapter adapter;
 
     private Product product;
-    private ProductEntity entity;
+    private ProductJpaEntity entity;
     private ID productId;
     private Currency USD;
 
@@ -50,14 +50,14 @@ class ProductH2AdapterTest {
             "PROD-001",
             ProductStatus.ACTIVE
         );
-        entity = ProductEntityMapper.toEntity(product);
+        entity = ProductJpaMapper.toEntity(product);
     }
 
     @Test
     @DisplayName("Should save product")
     void shouldSaveProduct() {
         // Given
-        when(jpaRepository.save(any(ProductEntity.class))).thenReturn(entity);
+        when(jpaRepository.save(any(ProductJpaEntity.class))).thenReturn(entity);
 
         // When
         Product result = adapter.save(product);
@@ -65,7 +65,7 @@ class ProductH2AdapterTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(productId);
-        verify(jpaRepository).save(any(ProductEntity.class));
+        verify(jpaRepository).save(any(ProductJpaEntity.class));
     }
 
     @Test
@@ -117,7 +117,7 @@ class ProductH2AdapterTest {
     @DisplayName("Should find all products")
     void shouldFindAllProducts() {
         // Given
-        ProductEntity entity2 = ProductEntityMapper.toEntity(
+        ProductJpaEntity entity2 = ProductJpaMapper.toEntity(
             Product.create("Product 2", Money.of(new BigDecimal("49.99"), USD), "PROD-002")
         );
         when(jpaRepository.findAll()).thenReturn(List.of(entity, entity2));
