@@ -74,6 +74,18 @@ services:
     networks:
       - richbank-network
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: richbank-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686" # Arayüz (UI) portu
+      - "4317:4317"   # OTLP gRPC portu (Uygulamanın veri attığı yer)
+      - "4318:4318"   # OTLP HTTP portu
+    networks:
+      - richbank-network
+
 volumes:
   prometheus-data:
     driver: local

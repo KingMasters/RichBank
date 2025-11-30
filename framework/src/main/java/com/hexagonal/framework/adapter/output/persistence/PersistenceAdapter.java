@@ -1,4 +1,4 @@
-package com.hexagonal.framework.common;
+package com.hexagonal.framework.adapter.output.persistence;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface WebAdapter {
+public @interface PersistenceAdapter {
 
   /**
    * The value may indicate a suggestion for a logical component name,

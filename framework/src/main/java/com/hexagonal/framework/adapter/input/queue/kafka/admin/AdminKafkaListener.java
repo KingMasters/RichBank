@@ -6,7 +6,7 @@ import com.hexagonal.application.port.in.admin.product.CreateProductUseCase;
 import com.hexagonal.application.port.in.admin.user.HandleSupportIssueUseCase;
 import com.hexagonal.domain.entity.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hexagonal.framework.common.QueueAdapter;
+import com.hexagonal.framework.adapter.input.queue.kafka.QueueAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;

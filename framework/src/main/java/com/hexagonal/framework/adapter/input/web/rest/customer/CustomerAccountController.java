@@ -7,7 +7,7 @@ import com.hexagonal.application.port.in.customer.account.*;
 import com.hexagonal.application.port.in.customer.account.ViewOrderHistoryUseCase.ViewOrderHistoryQuery;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.entity.Order;
-import com.hexagonal.framework.common.WebAdapter;
+import com.hexagonal.framework.adapter.input.web.WebAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

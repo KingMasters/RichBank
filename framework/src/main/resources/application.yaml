@@ -58,6 +58,31 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+  spring:
+    application:
+      name: RichBank-Core  # 1. Jaeger ekranında servisini bu isimle göreceksin.
+
+  otel:
+    exporter:
+      otlp:
+        # 2. Trace verilerinin gönderileceği adres (Jaeger veya OTel Collector)
+        # Genelde gRPC için 4317, HTTP için 4318 portu kullanılır.
+        endpoint: http://localhost:4317
+        protocol: grpc
+      traces:
+        exporter: otlp # Trace'leri OTLP formatında dışarı aktar
+      metrics:
+        exporter: none # Şimdilik sadece Trace odaklıyız, metrikleri kapattık (isteğe bağlı açabilirsin)
+      logs:
+        exporter: none # Logları OTel üzerinden göndermiyoruz
+
+    # 3. Sampling (Örnekleme) Ayarı
+    # "always_on": Tüm istekleri kaydeder (Geliştirme ortamı için ideal).
+    # "parentbased_traceidratio": Prod ortamı için belirli bir yüzdeyi alır.
+    traces:
+      sampler:
+        probability: 1.0 # %100 her şeyi kaydet (Dev ortamı için)
+
 # gRPC Configuration
 grpc:
   server:

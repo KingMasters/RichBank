@@ -4,7 +4,7 @@ import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.CustomerEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.CustomerJpaRepository;
-import com.hexagonal.framework.common.PersistenceAdapter;
+import com.hexagonal.framework.adapter.output.persistence.PersistenceAdapter;
 import com.hexagonal.domain.vo.Email;
 import com.hexagonal.domain.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;

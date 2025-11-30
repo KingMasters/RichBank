@@ -1,4 +1,4 @@
-package com.hexagonal.framework.common;
+package com.hexagonal.framework.adapter.input.queue.kafka;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

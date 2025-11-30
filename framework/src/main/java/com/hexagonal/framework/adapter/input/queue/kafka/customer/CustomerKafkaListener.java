@@ -9,7 +9,7 @@ import com.hexagonal.domain.entity.Cart;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.domain.entity.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hexagonal.framework.common.QueueAdapter;
+import com.hexagonal.framework.adapter.input.queue.kafka.QueueAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;

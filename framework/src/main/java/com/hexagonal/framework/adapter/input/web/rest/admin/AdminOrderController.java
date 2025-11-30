@@ -7,7 +7,7 @@ import com.hexagonal.application.port.in.admin.order.ViewAllOrdersUseCase;
 import com.hexagonal.domain.entity.Order;
 import com.hexagonal.domain.vo.ID;
 import com.hexagonal.domain.vo.OrderStatus;
-import com.hexagonal.framework.common.WebAdapter;
+import com.hexagonal.framework.adapter.input.web.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

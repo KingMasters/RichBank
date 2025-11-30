@@ -4,7 +4,7 @@ import com.hexagonal.application.port.out.CustomerRepositoryPort;
 import com.hexagonal.domain.entity.Customer;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.mapper.CustomerDocumentMapper;
 import com.hexagonal.framework.adapter.output.persistence.mongodb.repository.CustomerMongoRepository;
-import com.hexagonal.framework.common.PersistenceAdapter;
+import com.hexagonal.framework.adapter.output.persistence.PersistenceAdapter;
 import com.hexagonal.domain.vo.Email;
 import com.hexagonal.domain.vo.ID;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

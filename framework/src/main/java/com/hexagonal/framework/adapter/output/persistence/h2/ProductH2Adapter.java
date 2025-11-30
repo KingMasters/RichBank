@@ -4,7 +4,7 @@ import com.hexagonal.application.port.out.ProductRepositoryPort;
 import com.hexagonal.domain.entity.Product;
 import com.hexagonal.framework.adapter.output.persistence.h2.mapper.ProductEntityMapper;
 import com.hexagonal.framework.adapter.output.persistence.h2.repository.ProductJpaRepository;
-import com.hexagonal.framework.common.PersistenceAdapter;
+import com.hexagonal.framework.adapter.output.persistence.PersistenceAdapter;
 import com.hexagonal.domain.vo.ID;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

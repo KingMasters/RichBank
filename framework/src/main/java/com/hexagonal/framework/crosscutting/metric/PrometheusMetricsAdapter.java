@@ -1,7 +1,6 @@
 package com.hexagonal.framework.crosscutting.metric;
 
 import com.hexagonal.application.port.out.MetricsPort;
-import com.hexagonal.framework.common.MetricsAdapter;
 import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

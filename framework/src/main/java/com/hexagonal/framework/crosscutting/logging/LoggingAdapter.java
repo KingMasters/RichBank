@@ -1,4 +1,4 @@
-package com.hexagonal.framework.common;
+package com.hexagonal.framework.crosscutting.logging;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface PersistenceAdapter {
+public @interface LoggingAdapter {
 
   /**
    * The value may indicate a suggestion for a logical component name,

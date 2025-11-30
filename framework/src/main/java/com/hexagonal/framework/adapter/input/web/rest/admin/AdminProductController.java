@@ -8,7 +8,7 @@ import com.hexagonal.application.port.in.admin.product.ManageProductStockUseCase
 import com.hexagonal.application.port.in.admin.product.RemoveProductUseCase;
 import com.hexagonal.application.port.in.admin.product.UpdateProductUseCase;
 import com.hexagonal.domain.entity.Product;
-import com.hexagonal.framework.common.WebAdapter;
+import com.hexagonal.framework.adapter.input.web.WebAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.hexagonal.framework.common;
+package com.hexagonal.framework.crosscutting.metric;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
